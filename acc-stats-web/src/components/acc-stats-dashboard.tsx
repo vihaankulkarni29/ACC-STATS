@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode, type MouseEvent } from "react";
-import { ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Download, Filter, LayoutDashboard, Moon, Search, Sun, Trophy, Users, X, Target, Flame, Shield, ChevronRight } from "lucide-react";
+import { ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Download, Filter, LayoutDashboard, Moon, Search, Sun, Trophy, Users, X, Target, Flame, Shield, ChevronRight, GitCompareArrows, Medal } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import "@fontsource-variable/manrope";
@@ -54,6 +54,13 @@ type Player = {
   name_variants: string;
   season_player_ids: string;
   match_ids_all: string;
+  batting_rank: number;
+  bowling_rank: number;
+  fielding_rank: number;
+  catches: number;
+  stumpings: number;
+  run_outs: number;
+  fielding_dismissals: number;
 };
 
 const PLAYERS = data as Player[];
@@ -72,12 +79,13 @@ function saveCsv(filename: string, rows: (string | number)[][]) {
   setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
-type View = "overview" | "batting" | "bowling" | "players";
+type View = "overview" | "batting" | "bowling" | "players" | "compare";
 const views = [
-  { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5â€“8 cumulative snapshot.", prompt: "Show me the tournament overview." },
+  { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5–8 cumulative snapshot.", prompt: "Show me the tournament overview." },
   { id: "batting" as View, label: "Batting", short: "Batting", icon: Trophy, description: "Top run scorers, strike rates, and batting leaders.", prompt: "Who dominated with the bat?" },
   { id: "bowling" as View, label: "Bowling", short: "Bowling", icon: Target, description: "Wicket takers, economy, and bowling leaders.", prompt: "Who took the most wickets?" },
   { id: "players" as View, label: "Players", short: "Players", icon: Users, description: "Search and inspect every cumulative player record.", prompt: "Find any player's cumulative stats." },
+  { id: "compare" as View, label: "Compare", short: "Compare", icon: GitCompareArrows, description: "Head-to-head metric comparison between two players.", prompt: "Compare two players." },
 ];
 
 type SortKey = "runs" | "batting_average" | "batting_strike_rate" | "sixes" | "fours" | "wickets" | "economy" | "bowling_average" | "matches_played";
@@ -128,15 +136,26 @@ function BarList({ items, valueKey, labelKey, max, tone = "teal" }: { items: Pla
   </div>;
 }
 
+function RankBadge({ label, rank }: { label: string; rank: number }) {
+  return <div style={{display:"flex",alignItems:"center",gap:6,border:"1px solid var(--gd-line)",borderRadius:10,padding:"6px 10px",background:"var(--gd-inner)"}}>
+    <Medal size={14} aria-hidden="true" /><span style={{fontSize:11,color:"var(--gd-muted)"}}>{label}</span><strong style={{marginLeft:"auto",fontSize:12}}>#{rank}</strong>
+  </div>;
+}
+
 function PlayerDialog({ player, onClose }: { player: Player; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { ref.current?.showModal(); }, []);
   return <dialog className="gd-dialog" ref={ref} onClose={onClose} onClick={(e)=>{ if(e.target===e.currentTarget) e.currentTarget.close(); }}>
     <section className="gd-dialog-inner">
       <header><h2 style={{fontSize:20}}>{player.player_name}</h2><button type="button" className="gd-icon-button" aria-label="Close" onClick={()=>ref.current?.close()}><X aria-hidden="true"/></button></header>
-      <p style={{color:"var(--gd-muted)",fontSize:12,marginBottom:12}}>{player.acc_cumulative_id} Â· {player.teams_all.replaceAll("|", ", ")} Â· Seasons {player.season_list.replaceAll("|", ", ")}</p>
+      <p style={{color:"var(--gd-muted)",fontSize:12,marginBottom:12}}>{player.acc_cumulative_id} · {player.teams_all.replaceAll("|", ", ")} · Seasons {player.season_list.replaceAll("|", ", ")}</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
+        <RankBadge label="Batting" rank={player.batting_rank} />
+        <RankBadge label="Bowling" rank={player.bowling_rank} />
+        <RankBadge label="Fielding" rank={player.fielding_rank} />
+      </div>
       <div className="gd-work-facts" style={{gridTemplateColumns:"repeat(4,minmax(0,1fr))"}}>
-        {[["Matches",player.matches_played],["Runs",player.runs],["HS",player.highest_score],["Avg",fmt2(player.batting_average)],["SR",fmt2(player.batting_strike_rate)],["4s/6s",`${player.fours}/${player.sixes}`],["Wickets",player.wickets],["Best",player.best_bowling||"-"],["Econ",fmt2(player.economy)],["Bowl Avg",player.wickets?fmt2(player.bowling_average):"-"],["Overs",player.overs_bowled],["Dots",player.dots]].map(([l,v])=>(
+        {[["Matches",player.matches_played],["Runs",player.runs],["HS",player.highest_score],["Avg",fmt2(player.batting_average)],["SR",fmt2(player.batting_strike_rate)],["4s/6s",`${player.fours}/${player.sixes}`],["Wickets",player.wickets],["Best",player.best_bowling||"-"],["Econ",fmt2(player.economy)],["Bowl Avg",player.wickets?fmt2(player.bowling_average):"-"],["Overs",player.overs_bowled],["Fielding",`${player.fielding_dismissals} (Ct ${player.catches}/St ${player.stumpings}/RO ${player.run_outs})`]].map(([l,v])=>(
           <div key={String(l)}><dt>{l}</dt><dd>{String(v)}</dd></div>
         ))}
       </div>
@@ -192,6 +211,10 @@ export default function AccStatsDashboard() {
   const [selected, setSelected] = useState<Player | null>(null);
   const [sortBat, setSortBat] = useState<SortKey>("runs");
   const [sortBowl, setSortBowl] = useState<SortKey>("wickets");
+  const [cmpA, setCmpA] = useState<string>(PLAYERS[0]?.acc_cumulative_id || "");
+  const [cmpB, setCmpB] = useState<string>(PLAYERS[1]?.acc_cumulative_id || "");
+  const [cmpExtra1, setCmpExtra1] = useState<string>("fielding_dismissals");
+  const [cmpExtra2, setCmpExtra2] = useState<string>("matches_played");
   const root = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const scrollArea = useRef<HTMLDivElement>(null);
@@ -381,16 +404,101 @@ export default function AccStatsDashboard() {
               </div>}
 
               {view==="players" && <div className="gd-analytics">
-                <Panel title="All players" subtitle={`${filtered.length} players Â· click a row for details`} action={<button type="button" className="gd-secondary" onClick={exportPlayers}><Download aria-hidden="true"/>Export CSV</button>}>
+                <Panel title="All players" subtitle={`${filtered.length} players · click a row for details`} action={<button type="button" className="gd-secondary" onClick={exportPlayers}><Download aria-hidden="true"/>Export CSV</button>}>
                   <div className="gd-table-scroll"><table>
-                    <thead><tr><th>ID</th><th>Player</th><th>Teams</th><th>S</th><th>Mat</th><th>Runs</th><th>HS</th><th>Avg</th><th>SR</th><th>Wkts</th><th>BBI</th><th>Econ</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Player</th><th>Bat#</th><th>Bowl#</th><th>Fld#</th><th>Teams</th><th>S</th><th>Mat</th><th>Runs</th><th>HS</th><th>Avg</th><th>SR</th><th>Wkts</th><th>BBI</th><th>Econ</th></tr></thead>
                     <tbody>{filtered.map(p=><tr key={p.acc_cumulative_id} onClick={()=>setSelected(p)} style={{cursor:"pointer"}}>
-                      <td>{p.acc_cumulative_id}</td><td>{p.player_name}</td><td>{p.teams_all.replaceAll("|",", ")}</td><td>{p.seasons_played}</td><td>{p.matches_played}</td><td>{p.runs}</td><td>{p.highest_score}</td><td>{fmt2(p.batting_average)}</td><td>{fmt2(p.batting_strike_rate)}</td><td>{p.wickets}</td><td>{p.best_bowling||"-"}</td><td>{fmt2(p.economy)}</td>
+                      <td>{p.acc_cumulative_id}</td><td>{p.player_name}</td><td>#{p.batting_rank}</td><td>#{p.bowling_rank}</td><td>#{p.fielding_rank}</td><td>{p.teams_all.replaceAll("|",", ")}</td><td>{p.seasons_played}</td><td>{p.matches_played}</td><td>{p.runs}</td><td>{p.highest_score}</td><td>{fmt2(p.batting_average)}</td><td>{fmt2(p.batting_strike_rate)}</td><td>{p.wickets}</td><td>{p.best_bowling||"-"}</td><td>{fmt2(p.economy)}</td>
                     </tr>)}</tbody>
                   </table></div>
                   {filtered.length===0 && <p className="gd-empty" role="status">No players match filters.</p>}
                 </Panel>
               </div>}
+
+              {view==="compare" && (() => {
+                const a = PLAYERS.find(p=>p.acc_cumulative_id===cmpA) || PLAYERS[0];
+                const b = PLAYERS.find(p=>p.acc_cumulative_id===cmpB) || PLAYERS[1];
+                const extraOptions = [
+                  { key: "matches_played", label: "Matches" },
+                  { key: "fielding_dismissals", label: "Fielding dismissals" },
+                  { key: "catches", label: "Catches" },
+                  { key: "fours", label: "Fours" },
+                  { key: "sixes", label: "Sixes" },
+                  { key: "not_outs", label: "Not outs" },
+                  { key: "batting_rank", label: "Batting rank" },
+                  { key: "bowling_rank", label: "Bowling rank" },
+                  { key: "fielding_rank", label: "Fielding rank" },
+                ];
+                const fmtVal = (key:string, p:Player) => {
+                  const v:any = (p as any)[key];
+                  if (key==="batting_average"||key==="batting_strike_rate"||key==="bowling_average"||key==="economy"||key==="bowling_strike_rate") return fmt2(Number(v||0));
+                  if (key==="overs_bowled"||key==="best_bowling"||key==="highest_score") return String(v||"-");
+                  if (key.includes("rank")) return `#${v}`;
+                  return String(v??0);
+                };
+                const numVal = (key:string, p:Player) => {
+                  const v:any = (p as any)[key];
+                  if (key==="best_bowling") { const m=String(v||"0/0").match(/(\d+)\/(\d+)/); return m?Number(m[1])*1000-Number(m[2]):0; }
+                  if (key==="highest_score") { return Number(String(v||"0").replace("*",""))||0; }
+                  if (key.includes("rank")) return -Number(v||9999);
+                  if (key==="bowling_average"||key==="economy"||key==="bowling_strike_rate") return -Number(v||99999);
+                  return Number(v||0);
+                };
+                const metrics = [
+                  { key: "runs", label: "Runs", group: "Batting" },
+                  { key: "batting_average", label: "Batting Avg", group: "Batting" },
+                  { key: "batting_strike_rate", label: "Strike Rate", group: "Batting" },
+                  { key: "wickets", label: "Wickets", group: "Bowling" },
+                  { key: "bowling_average", label: "Bowling Avg", group: "Bowling" },
+                  { key: "economy", label: "Economy", group: "Bowling" },
+                  { key: cmpExtra1, label: extraOptions.find(x=>x.key===cmpExtra1)?.label||cmpExtra1, group: "Extra" },
+                  { key: cmpExtra2, label: extraOptions.find(x=>x.key===cmpExtra2)?.label||cmpExtra2, group: "Extra" },
+                ];
+                return <div className="gd-analytics">
+                  <Panel title="Compare players" subtitle="8-metric head-to-head comparison" action={<div className="gd-table-tools">
+                    <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>A</span><select value={cmpA} onChange={e=>setCmpA(e.target.value)} aria-label="Player A">{PLAYERS.map(p=><option key={p.acc_cumulative_id} value={p.acc_cumulative_id}>{p.player_name}</option>)}</select></label>
+                    <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>B</span><select value={cmpB} onChange={e=>setCmpB(e.target.value)} aria-label="Player B">{PLAYERS.map(p=><option key={p.acc_cumulative_id} value={p.acc_cumulative_id}>{p.player_name}</option>)}</select></label>
+                  </div>}>
+                    <div style={{display:"grid",gridTemplateColumns:"1fr auto 1fr",gap:12,alignItems:"center",marginBottom:16}}>
+                      <div style={{textAlign:"center",padding:12,border:"1px solid var(--gd-line)",borderRadius:14,background:"var(--gd-inner)"}}>
+                        <strong style={{fontSize:16}}>{a.player_name}</strong>
+                        <div style={{fontSize:11,color:"var(--gd-muted)",marginTop:4}}>{a.teams_all.replaceAll("|",", ")}</div>
+                        <div style={{display:"flex",gap:6,justifyContent:"center",marginTop:8,flexWrap:"wrap"}}><span className="gd-metric" style={{minBlockSize:0,padding:"4px 8px",fontSize:11}}>Bat #{a.batting_rank}</span><span className="gd-metric" style={{minBlockSize:0,padding:"4px 8px",fontSize:11}}>Bowl #{a.bowling_rank}</span><span className="gd-metric" style={{minBlockSize:0,padding:"4px 8px",fontSize:11}}>Fld #{a.fielding_rank}</span></div>
+                      </div>
+                      <div style={{fontWeight:800,color:"var(--gd-muted)"}}>VS</div>
+                      <div style={{textAlign:"center",padding:12,border:"1px solid var(--gd-line)",borderRadius:14,background:"var(--gd-inner)"}}>
+                        <strong style={{fontSize:16}}>{b.player_name}</strong>
+                        <div style={{fontSize:11,color:"var(--gd-muted)",marginTop:4}}>{b.teams_all.replaceAll("|",", ")}</div>
+                        <div style={{display:"flex",gap:6,justifyContent:"center",marginTop:8,flexWrap:"wrap"}}><span className="gd-metric" style={{minBlockSize:0,padding:"4px 8px",fontSize:11}}>Bat #{b.batting_rank}</span><span className="gd-metric" style={{minBlockSize:0,padding:"4px 8px",fontSize:11}}>Bowl #{b.bowling_rank}</span><span className="gd-metric" style={{minBlockSize:0,padding:"4px 8px",fontSize:11}}>Fld #{b.fielding_rank}</span></div>
+                      </div>
+                    </div>
+                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
+                      <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>Extra 1</span><select value={cmpExtra1} onChange={e=>setCmpExtra1(e.target.value)}>{extraOptions.map(o=><option key={o.key} value={o.key}>{o.label}</option>)}</select></label>
+                      <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>Extra 2</span><select value={cmpExtra2} onChange={e=>setCmpExtra2(e.target.value)}>{extraOptions.map(o=><option key={o.key} value={o.key}>{o.label}</option>)}</select></label>
+                    </div>
+                    <div style={{display:"grid",gap:8}}>
+                      {metrics.map(m => {
+                        const av=numVal(m.key,a); const bv=numVal(m.key,b);
+                        const aWins = av>bv; const bWins = bv>av;
+                        const max=Math.max(Math.abs(Number((a as any)[m.key])||0), Math.abs(Number((b as any)[m.key])||0), 1);
+                        const aRaw = Math.abs(Number((a as any)[m.key])||0);
+                        const bRaw = Math.abs(Number((b as any)[m.key])||0);
+                        return <div key={m.key} style={{display:"grid",gridTemplateColumns:"1fr 140px 1fr",gap:10,alignItems:"center"}}>
+                          <div style={{textAlign:"right"}}>
+                            <div style={{fontWeight:aWins?800:600,fontSize:13,color:aWins?"var(--gd-teal)":"var(--gd-ink)"}}>{fmtVal(m.key,a)}</div>
+                            <div className="gd-mix-track" style={{marginTop:4,height:6}}><div style={{display:"flex",justifyContent:"flex-end"}}><i className="gd-fill" data-tone={aWins?"teal":"ink"} style={{width:`${(aRaw/max)*100}%`}} /></div></div>
+                          </div>
+                          <div style={{textAlign:"center"}}><div style={{fontSize:11,fontWeight:750}}>{m.label}</div><div style={{fontSize:9,color:"var(--gd-muted)"}}>{m.group}</div></div>
+                          <div>
+                            <div style={{fontWeight:bWins?800:600,fontSize:13,color:bWins?"var(--gd-teal)":"var(--gd-ink)"}}>{fmtVal(m.key,b)}</div>
+                            <div className="gd-mix-track" style={{marginTop:4,height:6}}><i className="gd-fill" data-tone={bWins?"teal":"ink"} style={{width:`${(bRaw/max)*100}%`}} /></div>
+                          </div>
+                        </div>;
+                      })}
+                    </div>
+                  </Panel>
+                </div>;
+              })()}
             </div>
           </div>
         </main>
