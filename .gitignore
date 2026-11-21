@@ -1,0 +1,22 @@
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+acc-stats-web/node_modules/
+acc-stats-web/dist/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local temp/scratch
+*.tmp
+*.tmpclean
+*.log
+nul
+
+# Keep share zip/folder optional? include by default

@@ -1,0 +1,25 @@
+match_id,team_a,team_b,round,start,status,result,winning_team
+5155125,Scorpions,Warriors,League Matches,2022-12-24T03:45:38.000Z,past,Resulted,Scorpions
+5156648,EAGLES,Giants,League Matches,2022-12-24T04:56:49.000Z,past,Resulted,EAGLES
+5157690,Crusaders,Raiders,League Matches,2022-12-24T05:58:36.000Z,past,Resulted,Raiders
+5158239,Challangers,Fighters,League Matches,2022-12-24T06:56:21.000Z,past,Resulted,Fighters
+5160053,Tigers,Warriors,League Matches,2022-12-24T08:28:09.000Z,past,Resulted,Warriors
+5160953,Crusaders,Scorpions,League Matches,2022-12-24T09:19:50.000Z,past,Resulted,Crusaders
+5161933,Giants,Challangers,League Matches,2022-12-24T10:28:26.000Z,past,Tie,
+5162665,Fighters,Panthers,League Matches,2022-12-24T11:30:04.000Z,past,Resulted,Fighters
+5163372,Scorpions,Tigers,League Matches,2022-12-24T12:43:12.000Z,past,Resulted,Tigers
+5164049,EAGLES,Fighters,League Matches,2022-12-24T13:42:17.000Z,past,Resulted,Fighters
+5164725,Raiders,Warriors,League Matches,2022-12-24T14:46:33.000Z,past,Resulted,Warriors
+5165319,Tigers,Crusaders,League Matches,2022-12-24T15:40:28.000Z,past,Resulted,Crusaders
+5166111,Panthers,Challangers,League Matches,2022-12-24T16:50:12.000Z,past,Resulted,Challangers
+5171423,Panthers,Giants,League Matches,2022-12-25T04:06:15.000Z,past,Resulted,Giants
+5173836,Tigers,Raiders,League Matches,2022-12-25T04:57:46.000Z,past,Resulted,Tigers
+5175450,EAGLES,Challangers,League Matches,2022-12-25T05:57:00.000Z,past,Resulted,EAGLES
+5177282,Crusaders,Warriors,League Matches,2022-12-25T07:02:28.000Z,past,Resulted,Crusaders
+5180416,Giants,Fighters,League Matches,2022-12-25T09:08:31.000Z,past,Resulted,Giants
+5181760,Scorpions,Raiders,League Matches,2022-12-25T10:08:29.000Z,past,Resulted,Scorpions
+5183011,EAGLES,Panthers,League Matches,2022-12-25T11:13:36.000Z,past,Resulted,EAGLES
+5184000,EAGLES,Crusaders,Qualifier 1,2022-12-25T12:29:45.000Z,past,Resulted,EAGLES
+5184609,Fighters,Tigers,Eliminator,2022-12-25T13:31:35.000Z,past,Resulted,Tigers
+5185174,Crusaders,Tigers,Qualifier  2,2022-12-25T14:39:13.000Z,past,Resulted,Crusaders
+5186049,Crusaders,EAGLES,Final,2022-12-25T16:08:52.000Z,past,Resulted,Crusaders

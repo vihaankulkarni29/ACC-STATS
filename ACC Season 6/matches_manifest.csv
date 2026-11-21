@@ -1,0 +1,25 @@
+match_id,team_a,team_b,round,start,status,result,winning_team
+9544823,Giants,Panthers,League Matches,2024-01-26T14:20:25.000Z,past,Resulted,Panthers
+9545779,Challengers,Crusaders,League Matches,2024-01-26T15:09:36.000Z,past,Resulted,Crusaders
+9552171,Panthers,Fighters,League Matches,2024-01-27T03:05:07.000Z,past,Resulted,Panthers
+9553387,Raiders,Tigers,League Matches,2024-01-27T04:05:26.000Z,past,Resulted,Tigers
+9554596,Eagles,Fighters,League Matches,2024-01-27T05:05:18.000Z,past,Resulted,Eagles
+9555923,Challengers,Scorpions,League Matches,2024-01-27T05:54:27.000Z,past,Resulted,Scorpions
+9557125,Eagles,Panthers,League Matches,2024-01-27T06:47:20.000Z,past,Resulted,Eagles
+9559737,Raiders,Crusaders,League Matches,2024-01-27T08:37:32.000Z,past,Resulted,Crusaders
+9561047,Tigers,Scorpions,League Matches,2024-01-27T09:30:04.000Z,past,Resulted,Scorpions
+9562732,Giants,Fighters,League Matches,2024-01-27T10:33:59.000Z,past,Resulted,Fighters
+9563651,Eagles,Warriors,League Matches,2024-01-27T11:20:29.000Z,past,Resulted,Eagles
+9564563,Challengers,Raiders,League Matches,2024-01-27T12:20:52.000Z,past,Resulted,Raiders
+9565659,Warriors,Giants,League Matches,2024-01-27T13:18:10.000Z,past,Resulted,Warriors
+9566661,Crusaders,Scorpions,League Matches,2024-01-27T14:15:52.000Z,past,Resulted,Crusaders
+9567867,Warriors,Panthers,League Matches,2024-01-27T15:22:03.000Z,past,Tie,
+9575395,Giants,Eagles,League Matches,2024-01-28T03:16:00.000Z,past,Resulted,Eagles
+9578488,Tigers,Challengers,League Matches,2024-01-28T04:22:00.000Z,past,Resulted,Tigers
+9581603,Scorpions,Raiders,League Matches,2024-01-28T05:19:51.000Z,past,Resulted,Scorpions
+9584370,Warriors,Fighters,League Matches,2024-01-28T06:19:57.000Z,past,Resulted,Fighters
+9586209,Tigers,Crusaders,League Matches,2024-01-28T07:13:26.000Z,past,Resulted,Crusaders
+9591912,Eagles,Crusaders,Qualifier 1,2024-01-28T09:53:00.000Z,past,Resulted,Eagles
+9594416,Panthers,Scorpions,Eliminator,2024-01-28T11:05:41.000Z,past,Resulted,Panthers
+9596756,Crusaders,Panthers,Qualifier  2,2024-01-28T13:02:00.000Z,past,Resulted,Crusaders
+9598802,Crusaders,Eagles,Final,2024-01-28T15:26:00.000Z,past,Resulted,Eagles

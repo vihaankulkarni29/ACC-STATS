@@ -1,0 +1,58 @@
+{
+  "generated_at_utc": "2026-11-21T13:26:29.942653+00:00",
+  "rules_version": "acc-cumulative-s5-s8-v1",
+  "seasons": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "sources": [
+    {
+      "season": 5,
+      "label": "ACC Season 5",
+      "file": "ACC Season 5\\ACC5_Season5_Definitive_Player_Scorecard.csv",
+      "manifest": "ACC Season 5\\matches_manifest.csv",
+      "rows": 92
+    },
+    {
+      "season": 6,
+      "label": "ACC Season 6",
+      "file": "ACC Season 6\\ACC6_Season6_Definitive_Player_Scorecard.csv",
+      "manifest": "ACC Season 6\\matches_manifest.csv",
+      "rows": 100
+    },
+    {
+      "season": 7,
+      "label": "ACC Season 7",
+      "file": "ACC7_Season7_Definitive_Player_Scorecard.csv",
+      "manifest": "matches_manifest.csv",
+      "rows": 110
+    },
+    {
+      "season": 8,
+      "label": "ACC Season 8",
+      "file": "ACC Season 8\\ACC8_Season8_Definitive_Player_Scorecard.csv",
+      "manifest": "ACC Season 8\\matches_manifest.csv",
+      "rows": 100
+    }
+  ],
+  "outputs": {
+    "cumulative_csv": "ACC_Cumulative_S5-S8_Player_Scorecard.csv",
+    "breakdown_csv": "ACC_S5-S8_Player_Season_Breakdown.csv",
+    "qa_json": "ACC_Cumulative_S5-S8_QA_Report.json",
+    "metadata_json": "ACC_Cumulative_S5-S8_Metadata.json"
+  },
+  "counts": {
+    "breakdown_rows": 402,
+    "expected_breakdown_rows": 402,
+    "cumulative_unique_players": 220,
+    "seasons": {
+      "5": 92,
+      "6": 100,
+      "7": 110,
+      "8": 100
+    }
+  },
+  "totals_ok": true
+}

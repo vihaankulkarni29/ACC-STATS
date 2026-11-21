@@ -1,0 +1,242 @@
+[
+  {
+    "match_id": 21691573,
+    "team_a": "RAIDERS",
+    "team_b": "CRUSADERS",
+    "round": "League Matches",
+    "start": "2026-01-17T02:58:00.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "RAIDERS"
+  },
+  {
+    "match_id": 21693438,
+    "team_a": "PANTHERS",
+    "team_b": "FIGHTERS",
+    "round": "League Matches",
+    "start": "2026-01-17T04:00:00.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "PANTHERS"
+  },
+  {
+    "match_id": 21696032,
+    "team_a": "SCORPIONS",
+    "team_b": "EAGLES",
+    "round": "League Matches",
+    "start": "2026-01-17T05:06:55.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "SCORPIONS"
+  },
+  {
+    "match_id": 21698378,
+    "team_a": "WARRIORS",
+    "team_b": "GIANTS",
+    "round": "League Matches",
+    "start": "2026-01-17T06:08:49.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "GIANTS"
+  },
+  {
+    "match_id": 21700840,
+    "team_a": "TIGERS",
+    "team_b": "CRUSADERS",
+    "round": "League Matches",
+    "start": "2026-01-17T07:09:13.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "TIGERS"
+  },
+  {
+    "match_id": 21703357,
+    "team_a": "CHALLENGERS",
+    "team_b": "SCORPIONS",
+    "round": "League Matches",
+    "start": "2026-01-17T08:06:19.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "SCORPIONS"
+  },
+  {
+    "match_id": 21704983,
+    "team_a": "FIGHTERS",
+    "team_b": "RAIDERS",
+    "round": "League Matches",
+    "start": "2026-01-17T09:04:10.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "FIGHTERS"
+  },
+  {
+    "match_id": 21708136,
+    "team_a": "PANTHERS",
+    "team_b": "TIGERS",
+    "round": "League Matches",
+    "start": "2026-01-17T10:03:21.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "PANTHERS"
+  },
+  {
+    "match_id": 21710434,
+    "team_a": "SCORPIONS",
+    "team_b": "WARRIORS",
+    "round": "League Matches",
+    "start": "2026-01-17T11:04:37.000Z",
+    "status": "past",
+    "result": "Tie",
+    "winning_team": ""
+  },
+  {
+    "match_id": 21712167,
+    "team_a": "CHALLENGERS",
+    "team_b": "GIANTS",
+    "round": "League Matches",
+    "start": "2026-01-17T11:59:42.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "CHALLENGERS"
+  },
+  {
+    "match_id": 21713805,
+    "team_a": "FIGHTERS",
+    "team_b": "CRUSADERS",
+    "round": "League Matches",
+    "start": "2026-01-17T12:59:17.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "CRUSADERS"
+  },
+  {
+    "match_id": 21715977,
+    "team_a": "WARRIORS",
+    "team_b": "EAGLES",
+    "round": "League Matches",
+    "start": "2026-01-17T14:06:41.000Z",
+    "status": "past",
+    "result": "Tie",
+    "winning_team": ""
+  },
+  {
+    "match_id": 21718154,
+    "team_a": "RAIDERS",
+    "team_b": "PANTHERS",
+    "round": "League Matches",
+    "start": "2026-01-17T15:08:26.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "RAIDERS"
+  },
+  {
+    "match_id": 21730043,
+    "team_a": "WARRIORS",
+    "team_b": "CHALLENGERS",
+    "round": "League Matches",
+    "start": "2026-01-18T03:07:12.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "WARRIORS"
+  },
+  {
+    "match_id": 21733690,
+    "team_a": "GIANTS",
+    "team_b": "EAGLES",
+    "round": "League Matches",
+    "start": "2026-01-18T03:57:17.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "EAGLES"
+  },
+  {
+    "match_id": 21737663,
+    "team_a": "TIGERS",
+    "team_b": "RAIDERS",
+    "round": "League Matches",
+    "start": "2026-01-18T04:50:29.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "RAIDERS"
+  },
+  {
+    "match_id": 21742669,
+    "team_a": "CRUSADERS",
+    "team_b": "PANTHERS",
+    "round": "League Matches",
+    "start": "2026-01-18T05:56:53.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "PANTHERS"
+  },
+  {
+    "match_id": 21747539,
+    "team_a": "CHALLENGERS",
+    "team_b": "EAGLES",
+    "round": "League Matches",
+    "start": "2026-01-18T07:12:21.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "CHALLENGERS"
+  },
+  {
+    "match_id": 21751507,
+    "team_a": "FIGHTERS",
+    "team_b": "TIGERS",
+    "round": "League Matches",
+    "start": "2026-01-18T08:44:04.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "TIGERS"
+  },
+  {
+    "match_id": 21756393,
+    "team_a": "GIANTS",
+    "team_b": "SCORPIONS",
+    "round": "League Matches",
+    "start": "2026-01-18T09:28:01.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "SCORPIONS"
+  },
+  {
+    "match_id": 21760545,
+    "team_a": "PANTHERS",
+    "team_b": "SCORPIONS",
+    "round": "Qualifier 1",
+    "start": "2026-01-18T10:37:12.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "SCORPIONS"
+  },
+  {
+    "match_id": 21763609,
+    "team_a": "RAIDERS",
+    "team_b": "WARRIORS",
+    "round": "Eliminator",
+    "start": "2026-01-18T11:33:49.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "WARRIORS"
+  },
+  {
+    "match_id": 21766245,
+    "team_a": "PANTHERS",
+    "team_b": "WARRIORS",
+    "round": "Qualifier  2",
+    "start": "2026-01-18T12:38:48.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "PANTHERS"
+  },
+  {
+    "match_id": 21768560,
+    "team_a": "SCORPIONS",
+    "team_b": "PANTHERS",
+    "round": "Final",
+    "start": "2026-01-18T15:06:08.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "PANTHERS"
+  }
+]

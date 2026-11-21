@@ -1,0 +1,729 @@
+{
+  "seasons": [
+    {
+      "season": 5,
+      "file": "ACC Season 5\\ACC5_Season5_Definitive_Player_Scorecard.csv",
+      "players": 92,
+      "manifest_matches": 24
+    },
+    {
+      "season": 6,
+      "file": "ACC Season 6\\ACC6_Season6_Definitive_Player_Scorecard.csv",
+      "players": 100,
+      "manifest_matches": 24
+    },
+    {
+      "season": 7,
+      "file": "ACC7_Season7_Definitive_Player_Scorecard.csv",
+      "players": 110,
+      "manifest_matches": 24
+    },
+    {
+      "season": 8,
+      "file": "ACC Season 8\\ACC8_Season8_Definitive_Player_Scorecard.csv",
+      "players": 100,
+      "manifest_matches": 24
+    }
+  ],
+  "identity_conflicts": {
+    "same_id_different_names": [
+      {
+        "cricheroes_player_id": "326778",
+        "name_variants": {
+          "Suryaveer Sharma": 1,
+          "Suryaveer Sharma  (c & wk)": 1,
+          "Suryaveer Sharma  (c)": 1,
+          "Suryaveer Sharma  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17860242",
+        "name_variants": {
+          "Abhishek Jha  (c)": 2,
+          "Abhishek Jha  (c & wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "803821",
+        "name_variants": {
+          "Harsh": 1,
+          "Harsh  (c & wk)": 1,
+          "Harsh  (wk)": 2
+        }
+      },
+      {
+        "cricheroes_player_id": "17865769",
+        "name_variants": {
+          "Cicera Vinod Amin  (c)": 2,
+          "Cicera Vinod Amin": 2
+        }
+      },
+      {
+        "cricheroes_player_id": "1524538",
+        "name_variants": {
+          "Mohit Mahajan  (wk)": 1,
+          "Mohit Mahajan": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326736",
+        "name_variants": {
+          "Nitin Chauhaan  (c)": 1,
+          "Nitin Chauhaan  (c & wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "8024858",
+        "name_variants": {
+          "Mihir B  (c)": 1,
+          "Mihir B": 1,
+          "Mihir B  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "11608054",
+        "name_variants": {
+          "Prateek Pusalkar  (c)": 1,
+          "Prateek Pusalkar  (wk)": 3
+        }
+      },
+      {
+        "cricheroes_player_id": "326827",
+        "name_variants": {
+          "Anand Tagarrsi  (c)": 2,
+          "Anand Tagarrsi  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326707",
+        "name_variants": {
+          "Sumedh Amberkar  (c)": 2,
+          "Sumedh Amberkar  (c & wk)": 1,
+          "Sumedh Amberkar  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17866172",
+        "name_variants": {
+          "Kaustubh Dande  (wk)": 1,
+          "Kaustubh Dande": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326723",
+        "name_variants": {
+          "Subodh Rane  (c)": 1,
+          "Subodh Rane": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "108999",
+        "name_variants": {
+          "Gulab Suthar   (c & wk)": 1,
+          "Gulab Suthar   (c)": 1,
+          "Gulab Suthar   (wk)": 1,
+          "Gulab Suthar": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17861362",
+        "name_variants": {
+          "Devang Shah  (c)": 1,
+          "Devang Shah  (wk)": 2,
+          "Devang Shah": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17860037",
+        "name_variants": {
+          "Abhishek Jadhav": 2,
+          "Abhishek Jadhav  (c)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17825578",
+        "name_variants": {
+          "Akshay Sharma": 3,
+          "Akshay Sharma   (c & wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17886195",
+        "name_variants": {
+          "Sanika Pusalkar": 3,
+          "Sanika Pusalkar  (c)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326725",
+        "name_variants": {
+          "Bhuvanesh Parab": 3,
+          "Bhuvanesh Parab  (c)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326708",
+        "name_variants": {
+          "Saahil More  (c & wk)": 1,
+          "Saahil More  (c)": 2,
+          "Saahil More": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326756",
+        "name_variants": {
+          "Abhishek Prabhat  (c)": 3,
+          "Abhishek Prabhat": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326811",
+        "name_variants": {
+          "Atul Amode  (c)": 2,
+          "Atul Amode  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17825547",
+        "name_variants": {
+          "Vivan  (c)": 1,
+          "Vivan": 3
+        }
+      },
+      {
+        "cricheroes_player_id": "17865772",
+        "name_variants": {
+          "Sumit Sharma": 3,
+          "Sumit Sharma   (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326764",
+        "name_variants": {
+          "Gautam Prabhudesai": 2,
+          "Gautam Prabhudesai  (c & wk)": 1,
+          "Gautam Prabhudesai  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17825554",
+        "name_variants": {
+          "Irvinder Singh  (c)": 1,
+          "Irvinder Singh": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "157967",
+        "name_variants": {
+          "Sid Kangle  (c)": 2,
+          "Sid Kangle  (wk)": 1,
+          "Sid Kangle": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17842084",
+        "name_variants": {
+          "Omkar Dabolkar  (c)": 1,
+          "Omkar Dabolkar": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "17838991",
+        "name_variants": {
+          "Amey Mainak": 2,
+          "Amey Mainak  (c)": 2
+        }
+      },
+      {
+        "cricheroes_player_id": "326824",
+        "name_variants": {
+          "Pradyot Tarde  (c & wk)": 1,
+          "Pradyot Tarde  (wk)": 2
+        }
+      },
+      {
+        "cricheroes_player_id": "326825",
+        "name_variants": {
+          "Vineet Nair": 1,
+          "Vineet Nair  (c)": 2
+        }
+      },
+      {
+        "cricheroes_player_id": "326835",
+        "name_variants": {
+          "Mustan Ginwala  (c & wk)": 2,
+          "Mustan Ginwala  (wk)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "27112668",
+        "name_variants": {
+          "Vihaan Kulkarni": 2,
+          "Vihaan Kulkarni  (c)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326721",
+        "name_variants": {
+          "Arun Kale": 2,
+          "Arun Kale  (c)": 1
+        }
+      },
+      {
+        "cricheroes_player_id": "326765",
+        "name_variants": {
+          "Tushar Kulkarni  (c)": 1,
+          "Tushar Kulkarni  (wk)": 2
+        }
+      },
+      {
+        "cricheroes_player_id": "34391017",
+        "name_variants": {
+          "Jeet Malandkar": 1,
+          "Jeet Malandkar  (wk)": 1
+        }
+      }
+    ],
+    "same_name_different_ids": [
+      {
+        "normalized_name": "shreya dakre",
+        "display_names": [
+          "Shreya Dakre"
+        ],
+        "cricheroes_player_ids": [
+          "1524240",
+          "17894851"
+        ]
+      },
+      {
+        "normalized_name": "sanil pose",
+        "display_names": [
+          "Sanil Pose"
+        ],
+        "cricheroes_player_ids": [
+          "1524535",
+          "36225955"
+        ]
+      },
+      {
+        "normalized_name": "gauri kale",
+        "display_names": [
+          "Gauri Kale"
+        ],
+        "cricheroes_player_ids": [
+          "27101535",
+          "333687"
+        ]
+      },
+      {
+        "normalized_name": "vedant pose",
+        "display_names": [
+          "Vedant Pose"
+        ],
+        "cricheroes_player_ids": [
+          "17866173",
+          "27113179"
+        ]
+      },
+      {
+        "normalized_name": "yashree kulkarni",
+        "display_names": [
+          "Yashree Kulkarni"
+        ],
+        "cricheroes_player_ids": [
+          "1524242",
+          "36178895"
+        ]
+      },
+      {
+        "normalized_name": "shankar paswan",
+        "display_names": [
+          "Shankar Paswan"
+        ],
+        "cricheroes_player_ids": [
+          "17894705",
+          "36226973"
+        ]
+      },
+      {
+        "normalized_name": "suhas chindarkar",
+        "display_names": [
+          "Suhas Chindarkar"
+        ],
+        "cricheroes_player_ids": [
+          "17841895",
+          "326810",
+          "36225458"
+        ]
+      },
+      {
+        "normalized_name": "vikas solanki",
+        "display_names": [
+          "Vikas Solanki"
+        ],
+        "cricheroes_player_ids": [
+          "17825548",
+          "36226976"
+        ]
+      },
+      {
+        "normalized_name": "rishabh shukla",
+        "display_names": [
+          "Rishabh Shukla"
+        ],
+        "cricheroes_player_ids": [
+          "1524269",
+          "17865996"
+        ]
+      },
+      {
+        "normalized_name": "karan jadeja",
+        "display_names": [
+          "KARAN JADEJA",
+          "Karan Jadeja"
+        ],
+        "cricheroes_player_ids": [
+          "26690169",
+          "27113275",
+          "46071505"
+        ]
+      },
+      {
+        "normalized_name": "mohit mahajan",
+        "display_names": [
+          "MOHIT MAHAJAN",
+          "Mohit Mahajan"
+        ],
+        "cricheroes_player_ids": [
+          "1524538",
+          "46456347"
+        ]
+      },
+      {
+        "normalized_name": "idhaant kulkarni",
+        "display_names": [
+          "Idhaant Kulkarni"
+        ],
+        "cricheroes_player_ids": [
+          "27103875",
+          "36225957"
+        ]
+      },
+      {
+        "normalized_name": "kartik solanki",
+        "display_names": [
+          "Kartik Solanki"
+        ],
+        "cricheroes_player_ids": [
+          "26958693",
+          "27105105",
+          "36225693"
+        ]
+      },
+      {
+        "normalized_name": "darsh soni",
+        "display_names": [
+          "Darsh Soni"
+        ],
+        "cricheroes_player_ids": [
+          "27106136",
+          "36226940",
+          "46484411"
+        ]
+      },
+      {
+        "normalized_name": "gaurav jadhav",
+        "display_names": [
+          "Gaurav Jadhav"
+        ],
+        "cricheroes_player_ids": [
+          "27113274",
+          "27166796"
+        ]
+      },
+      {
+        "normalized_name": "priya kulkarni",
+        "display_names": [
+          "Priya Kulkarni"
+        ],
+        "cricheroes_player_ids": [
+          "326841",
+          "36263540"
+        ]
+      },
+      {
+        "normalized_name": "vihaansh suthar",
+        "display_names": [
+          "Vihaansh Suthar"
+        ],
+        "cricheroes_player_ids": [
+          "27112840",
+          "36226874"
+        ]
+      },
+      {
+        "normalized_name": "archana kale",
+        "display_names": [
+          "Archana Kale"
+        ],
+        "cricheroes_player_ids": [
+          "27112286",
+          "36226922",
+          "46458855"
+        ]
+      },
+      {
+        "normalized_name": "advay kamat",
+        "display_names": [
+          "Advay Kamat"
+        ],
+        "cricheroes_player_ids": [
+          "27112667",
+          "36225691"
+        ]
+      },
+      {
+        "normalized_name": "shauryan sawant",
+        "display_names": [
+          "Shauryan Sawant"
+        ],
+        "cricheroes_player_ids": [
+          "27105641",
+          "36225459"
+        ]
+      },
+      {
+        "normalized_name": "chandrakant mhatre",
+        "display_names": [
+          "CHANDRAKANT MHATRE",
+          "Chandrakant Mhatre"
+        ],
+        "cricheroes_player_ids": [
+          "1524513",
+          "46456382"
+        ]
+      },
+      {
+        "normalized_name": "vivaan sangwani",
+        "display_names": [
+          "Vivaan Sangwani"
+        ],
+        "cricheroes_player_ids": [
+          "27112231",
+          "36226977"
+        ]
+      },
+      {
+        "normalized_name": "prakash solanki",
+        "display_names": [
+          "Prakash Solanki",
+          "prakash solanki"
+        ],
+        "cricheroes_player_ids": [
+          "17921504",
+          "46472697"
+        ]
+      },
+      {
+        "normalized_name": "kiran bhandary",
+        "display_names": [
+          "KIRAN BHANDARY",
+          "Kiran Bhandary"
+        ],
+        "cricheroes_player_ids": [
+          "326722",
+          "46456329"
+        ]
+      },
+      {
+        "normalized_name": "neel solanki",
+        "display_names": [
+          "Neel Solanki"
+        ],
+        "cricheroes_player_ids": [
+          "36226904",
+          "46472696"
+        ]
+      }
+    ]
+  },
+  "missing_cricheroes_player_id": [],
+  "totals_reconciliation": {
+    "season_sum": {
+      "matches_played": 1894,
+      "bat_innings": 1410,
+      "not_outs": 338,
+      "runs": 12088,
+      "balls_faced": 9538,
+      "fours": 497,
+      "sixes": 399,
+      "ducks": 151,
+      "30s": 69,
+      "50s": 7,
+      "100s": 0,
+      "bowl_innings": 1552,
+      "maidens": 12,
+      "runs_conceded": 13214,
+      "wickets": 392,
+      "wides": 768,
+      "no_balls": 344,
+      "dots": 3179,
+      "3_wicket_hauls": 3,
+      "5_wicket_hauls": 0,
+      "balls_bowled": 9185
+    },
+    "cumulative_sum": {
+      "matches_played": 1894,
+      "bat_innings": 1410,
+      "not_outs": 338,
+      "runs": 12088,
+      "balls_faced": 9538,
+      "fours": 497,
+      "sixes": 399,
+      "ducks": 151,
+      "30s": 69,
+      "50s": 7,
+      "100s": 0,
+      "bowl_innings": 1552,
+      "maidens": 12,
+      "runs_conceded": 13214,
+      "wickets": 392,
+      "wides": 768,
+      "no_balls": 344,
+      "dots": 3179,
+      "3_wicket_hauls": 3,
+      "5_wicket_hauls": 0,
+      "balls_bowled": 9185
+    },
+    "mismatches": [],
+    "ok": true
+  },
+  "match_integrity": {
+    "player_season_mismatch": [],
+    "unknown_match_ids": []
+  },
+  "anomalies": [],
+  "counts": {
+    "breakdown_rows": 402,
+    "expected_breakdown_rows": 402,
+    "cumulative_unique_players": 220,
+    "seasons": {
+      "5": 92,
+      "6": 100,
+      "7": 110,
+      "8": 100
+    }
+  },
+  "spot_check_top_runs": [
+    {
+      "acc_cumulative_id": "ACC-C001",
+      "player_name": "Prateek Pusalkar  (wk)",
+      "cricheroes_player_id": "11608054",
+      "seasons_played": 4,
+      "matches_played": 20,
+      "runs": 546,
+      "wickets": 7,
+      "highest_score": "61*",
+      "best_bowling": "1/2"
+    },
+    {
+      "acc_cumulative_id": "ACC-C002",
+      "player_name": "Pratik Rane  (c & wk)",
+      "cricheroes_player_id": "326777",
+      "seasons_played": 4,
+      "matches_played": 25,
+      "runs": 455,
+      "wickets": 15,
+      "highest_score": "49*",
+      "best_bowling": "2/5"
+    },
+    {
+      "acc_cumulative_id": "ACC-C003",
+      "player_name": "Cicera Vinod Amin  (c)",
+      "cricheroes_player_id": "17865769",
+      "seasons_played": 4,
+      "matches_played": 22,
+      "runs": 438,
+      "wickets": 2,
+      "highest_score": "51*",
+      "best_bowling": "2/5"
+    },
+    {
+      "acc_cumulative_id": "ACC-C004",
+      "player_name": "Suryaveer Sharma",
+      "cricheroes_player_id": "326778",
+      "seasons_played": 4,
+      "matches_played": 24,
+      "runs": 398,
+      "wickets": 4,
+      "highest_score": "42*",
+      "best_bowling": "1/5"
+    },
+    {
+      "acc_cumulative_id": "ACC-C005",
+      "player_name": "Sumedh Amberkar  (c)",
+      "cricheroes_player_id": "326707",
+      "seasons_played": 4,
+      "matches_played": 17,
+      "runs": 395,
+      "wickets": 0,
+      "highest_score": "49*",
+      "best_bowling": "0/5"
+    },
+    {
+      "acc_cumulative_id": "ACC-C006",
+      "player_name": "Mihir B  (c)",
+      "cricheroes_player_id": "8024858",
+      "seasons_played": 3,
+      "matches_played": 16,
+      "runs": 351,
+      "wickets": 6,
+      "highest_score": "47",
+      "best_bowling": "2/9"
+    },
+    {
+      "acc_cumulative_id": "ACC-C007",
+      "player_name": "Pradyot Tarde  (wk)",
+      "cricheroes_player_id": "326824",
+      "seasons_played": 3,
+      "matches_played": 15,
+      "runs": 330,
+      "wickets": 5,
+      "highest_score": "57",
+      "best_bowling": "3/0"
+    },
+    {
+      "acc_cumulative_id": "ACC-C008",
+      "player_name": "Prasanna Kaka",
+      "cricheroes_player_id": "1524493",
+      "seasons_played": 3,
+      "matches_played": 15,
+      "runs": 292,
+      "wickets": 0,
+      "highest_score": "57*",
+      "best_bowling": "0/4"
+    },
+    {
+      "acc_cumulative_id": "ACC-C009",
+      "player_name": "Vihaan Kulkarni",
+      "cricheroes_player_id": "27112668",
+      "seasons_played": 3,
+      "matches_played": 14,
+      "runs": 251,
+      "wickets": 4,
+      "highest_score": "52*",
+      "best_bowling": "2/6"
+    },
+    {
+      "acc_cumulative_id": "ACC-C010",
+      "player_name": "Saahil More  (c)",
+      "cricheroes_player_id": "326708",
+      "seasons_played": 4,
+      "matches_played": 16,
+      "runs": 235,
+      "wickets": 10,
+      "highest_score": "50*",
+      "best_bowling": "3/11"
+    }
+  ]
+}

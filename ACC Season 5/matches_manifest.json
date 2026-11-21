@@ -1,0 +1,242 @@
+[
+  {
+    "match_id": 5155125,
+    "team_a": "Scorpions",
+    "team_b": "Warriors",
+    "round": "League Matches",
+    "start": "2022-12-24T03:45:38.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Scorpions"
+  },
+  {
+    "match_id": 5156648,
+    "team_a": "EAGLES",
+    "team_b": "Giants",
+    "round": "League Matches",
+    "start": "2022-12-24T04:56:49.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "EAGLES"
+  },
+  {
+    "match_id": 5157690,
+    "team_a": "Crusaders",
+    "team_b": "Raiders",
+    "round": "League Matches",
+    "start": "2022-12-24T05:58:36.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Raiders"
+  },
+  {
+    "match_id": 5158239,
+    "team_a": "Challangers",
+    "team_b": "Fighters",
+    "round": "League Matches",
+    "start": "2022-12-24T06:56:21.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Fighters"
+  },
+  {
+    "match_id": 5160053,
+    "team_a": "Tigers",
+    "team_b": "Warriors",
+    "round": "League Matches",
+    "start": "2022-12-24T08:28:09.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Warriors"
+  },
+  {
+    "match_id": 5160953,
+    "team_a": "Crusaders",
+    "team_b": "Scorpions",
+    "round": "League Matches",
+    "start": "2022-12-24T09:19:50.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Crusaders"
+  },
+  {
+    "match_id": 5161933,
+    "team_a": "Giants",
+    "team_b": "Challangers",
+    "round": "League Matches",
+    "start": "2022-12-24T10:28:26.000Z",
+    "status": "past",
+    "result": "Tie",
+    "winning_team": ""
+  },
+  {
+    "match_id": 5162665,
+    "team_a": "Fighters",
+    "team_b": "Panthers",
+    "round": "League Matches",
+    "start": "2022-12-24T11:30:04.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Fighters"
+  },
+  {
+    "match_id": 5163372,
+    "team_a": "Scorpions",
+    "team_b": "Tigers",
+    "round": "League Matches",
+    "start": "2022-12-24T12:43:12.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Tigers"
+  },
+  {
+    "match_id": 5164049,
+    "team_a": "EAGLES",
+    "team_b": "Fighters",
+    "round": "League Matches",
+    "start": "2022-12-24T13:42:17.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Fighters"
+  },
+  {
+    "match_id": 5164725,
+    "team_a": "Raiders",
+    "team_b": "Warriors",
+    "round": "League Matches",
+    "start": "2022-12-24T14:46:33.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Warriors"
+  },
+  {
+    "match_id": 5165319,
+    "team_a": "Tigers",
+    "team_b": "Crusaders",
+    "round": "League Matches",
+    "start": "2022-12-24T15:40:28.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Crusaders"
+  },
+  {
+    "match_id": 5166111,
+    "team_a": "Panthers",
+    "team_b": "Challangers",
+    "round": "League Matches",
+    "start": "2022-12-24T16:50:12.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Challangers"
+  },
+  {
+    "match_id": 5171423,
+    "team_a": "Panthers",
+    "team_b": "Giants",
+    "round": "League Matches",
+    "start": "2022-12-25T04:06:15.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Giants"
+  },
+  {
+    "match_id": 5173836,
+    "team_a": "Tigers",
+    "team_b": "Raiders",
+    "round": "League Matches",
+    "start": "2022-12-25T04:57:46.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Tigers"
+  },
+  {
+    "match_id": 5175450,
+    "team_a": "EAGLES",
+    "team_b": "Challangers",
+    "round": "League Matches",
+    "start": "2022-12-25T05:57:00.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "EAGLES"
+  },
+  {
+    "match_id": 5177282,
+    "team_a": "Crusaders",
+    "team_b": "Warriors",
+    "round": "League Matches",
+    "start": "2022-12-25T07:02:28.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Crusaders"
+  },
+  {
+    "match_id": 5180416,
+    "team_a": "Giants",
+    "team_b": "Fighters",
+    "round": "League Matches",
+    "start": "2022-12-25T09:08:31.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Giants"
+  },
+  {
+    "match_id": 5181760,
+    "team_a": "Scorpions",
+    "team_b": "Raiders",
+    "round": "League Matches",
+    "start": "2022-12-25T10:08:29.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Scorpions"
+  },
+  {
+    "match_id": 5183011,
+    "team_a": "EAGLES",
+    "team_b": "Panthers",
+    "round": "League Matches",
+    "start": "2022-12-25T11:13:36.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "EAGLES"
+  },
+  {
+    "match_id": 5184000,
+    "team_a": "EAGLES",
+    "team_b": "Crusaders",
+    "round": "Qualifier 1",
+    "start": "2022-12-25T12:29:45.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "EAGLES"
+  },
+  {
+    "match_id": 5184609,
+    "team_a": "Fighters",
+    "team_b": "Tigers",
+    "round": "Eliminator",
+    "start": "2022-12-25T13:31:35.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Tigers"
+  },
+  {
+    "match_id": 5185174,
+    "team_a": "Crusaders",
+    "team_b": "Tigers",
+    "round": "Qualifier  2",
+    "start": "2022-12-25T14:39:13.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Crusaders"
+  },
+  {
+    "match_id": 5186049,
+    "team_a": "Crusaders",
+    "team_b": "EAGLES",
+    "round": "Final",
+    "start": "2022-12-25T16:08:52.000Z",
+    "status": "past",
+    "result": "Resulted",
+    "winning_team": "Crusaders"
+  }
+]
