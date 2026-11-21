@@ -20,3 +20,15 @@ Thumbs.db
 nul
 
 # Keep share zip/folder optional? include by default
+
+
+# Generated/share artifacts
+acc-stats-share/
+ACC-Stats-Dashboard-share.zip
+acc_stats_data.json
+ACC_Cumulative_S5-S8_Player_Scorecard.csv
+*.cleaned.csv
+
+# Raw scraped scorecards (large/reproducible)
+raw_scorecards/
+ACC Season */raw_scorecards/
