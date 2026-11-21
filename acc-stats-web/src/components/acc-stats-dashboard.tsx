@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode, type MouseEvent } from "react";
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Download, Filter, LayoutDashboard, Moon, Search, Sun, Trophy, Users, X, Target, Flame, Shield, ChevronRight } from "lucide-react";
@@ -58,7 +58,6 @@ type Player = {
 
 const PLAYERS = data as Player[];
 const BG = "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1800&q=80";
-const BG_CREDIT = { label: "Photo by Alessandro Bogliari on Unsplash", href: "https://unsplash.com/photos/a-baseball-player-holding-a-bat-on-top-of-a-field-HdY3ydpLYnQ" };
 
 const number = new Intl.NumberFormat("en-US");
 const fmt = (n: number) => number.format(Math.round(n));
@@ -75,7 +74,7 @@ function saveCsv(filename: string, rows: (string | number)[][]) {
 
 type View = "overview" | "batting" | "bowling" | "players";
 const views = [
-  { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5–8 cumulative snapshot.", prompt: "Show me the tournament overview." },
+  { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5â€“8 cumulative snapshot.", prompt: "Show me the tournament overview." },
   { id: "batting" as View, label: "Batting", short: "Batting", icon: Trophy, description: "Top run scorers, strike rates, and batting leaders.", prompt: "Who dominated with the bat?" },
   { id: "bowling" as View, label: "Bowling", short: "Bowling", icon: Target, description: "Wicket takers, economy, and bowling leaders.", prompt: "Who took the most wickets?" },
   { id: "players" as View, label: "Players", short: "Players", icon: Users, description: "Search and inspect every cumulative player record.", prompt: "Find any player's cumulative stats." },
@@ -135,7 +134,7 @@ function PlayerDialog({ player, onClose }: { player: Player; onClose: () => void
   return <dialog className="gd-dialog" ref={ref} onClose={onClose} onClick={(e)=>{ if(e.target===e.currentTarget) e.currentTarget.close(); }}>
     <section className="gd-dialog-inner">
       <header><h2 style={{fontSize:20}}>{player.player_name}</h2><button type="button" className="gd-icon-button" aria-label="Close" onClick={()=>ref.current?.close()}><X aria-hidden="true"/></button></header>
-      <p style={{color:"var(--gd-muted)",fontSize:12,marginBottom:12}}>{player.acc_cumulative_id} · {player.teams_all.replaceAll("|", ", ")} · Seasons {player.season_list.replaceAll("|", ", ")}</p>
+      <p style={{color:"var(--gd-muted)",fontSize:12,marginBottom:12}}>{player.acc_cumulative_id} Â· {player.teams_all.replaceAll("|", ", ")} Â· Seasons {player.season_list.replaceAll("|", ", ")}</p>
       <div className="gd-work-facts" style={{gridTemplateColumns:"repeat(4,minmax(0,1fr))"}}>
         {[["Matches",player.matches_played],["Runs",player.runs],["HS",player.highest_score],["Avg",fmt2(player.batting_average)],["SR",fmt2(player.batting_strike_rate)],["4s/6s",`${player.fours}/${player.sixes}`],["Wickets",player.wickets],["Best",player.best_bowling||"-"],["Econ",fmt2(player.economy)],["Bowl Avg",player.wickets?fmt2(player.bowling_average):"-"],["Overs",player.overs_bowled],["Dots",player.dots]].map(([l,v])=>(
           <div key={String(l)}><dt>{l}</dt><dd>{String(v)}</dd></div>
@@ -286,7 +285,7 @@ export default function AccStatsDashboard() {
     <img className="gd-background" src={BG} alt="" aria-hidden="true" fetchPriority="high" />
     <div className="gd-surround">
       <header className="gd-top">
-        <div className="gd-brand"><span className="gd-logo" aria-hidden="true"><Trophy size={20}/></span><div><strong>ACC STATS</strong><small>Seasons 5–8 cumulative</small></div></div>
+        <div className="gd-brand"><span className="gd-logo" aria-hidden="true"><Trophy size={20}/></span><div><strong>ACC STATS</strong><small>Seasons 5â€“8 cumulative</small></div></div>
         <label className="gd-ask" style={{cursor:"text"}}>
           <span className="gd-orb" aria-hidden="true" />
           <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={current.prompt} aria-label="Search players" style={{flex:1,minWidth:0,border:0,background:"transparent",outline:"none",fontSize:12,fontWeight:750}} />
@@ -313,7 +312,7 @@ export default function AccStatsDashboard() {
               {view==="overview" && <div className="gd-analytics">
                 <div className="gd-metric-grid">
                   <Metric title="Players" icon={<Users/>} value={totals.players} detail="unique cumulative players" tone="teal" />
-                  <Metric title="Total Runs" icon={<Trophy/>} value={totals.runs} detail={`${fmt(totals.fours)} fours · ${fmt(totals.sixes)} sixes`} />
+                  <Metric title="Total Runs" icon={<Trophy/>} value={totals.runs} detail={`${fmt(totals.fours)} fours Â· ${fmt(totals.sixes)} sixes`} />
                   <Metric title="Total Wickets" icon={<Target/>} value={totals.wickets} detail={`econ ${fmt2(bowlEcon)}`} />
                   <Metric title="Batting SR" icon={<Flame/>} value={battingSR} format={fmt2} detail={`${fmt(totals.inns)} batting innings`} />
                 </div>
@@ -327,11 +326,11 @@ export default function AccStatsDashboard() {
                       </div>; })}
                     </div>
                   </Panel>
-                  <Panel title="Top run scorers" subtitle="Cumulative S5–S8">
+                  <Panel title="Top run scorers" subtitle="Cumulative S5â€“S8">
                     <BarList items={topRun} valueKey="runs" tone="teal" />
                   </Panel>
                 </div>
-                <Panel title="Top wicket takers" subtitle="Cumulative S5–S8">
+                <Panel title="Top wicket takers" subtitle="Cumulative S5â€“S8">
                   <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:12}}>
                     <BarList items={topWkt.slice(0,4)} valueKey="wickets" tone="coral" />
                     <BarList items={topWkt.slice(4,8)} valueKey="wickets" tone="coral" />
@@ -382,7 +381,7 @@ export default function AccStatsDashboard() {
               </div>}
 
               {view==="players" && <div className="gd-analytics">
-                <Panel title="All players" subtitle={`${filtered.length} players · click a row for details`} action={<button type="button" className="gd-secondary" onClick={exportPlayers}><Download aria-hidden="true"/>Export CSV</button>}>
+                <Panel title="All players" subtitle={`${filtered.length} players Â· click a row for details`} action={<button type="button" className="gd-secondary" onClick={exportPlayers}><Download aria-hidden="true"/>Export CSV</button>}>
                   <div className="gd-table-scroll"><table>
                     <thead><tr><th>ID</th><th>Player</th><th>Teams</th><th>S</th><th>Mat</th><th>Runs</th><th>HS</th><th>Avg</th><th>SR</th><th>Wkts</th><th>BBI</th><th>Econ</th></tr></thead>
                     <tbody>{filtered.map(p=><tr key={p.acc_cumulative_id} onClick={()=>setSelected(p)} style={{cursor:"pointer"}}>
@@ -397,7 +396,7 @@ export default function AccStatsDashboard() {
         </main>
         <Dock active={active} select={selectView} />
       </div>
-      <footer className="gd-footer"><span>ACC Seasons 5–8 · {fmt(PLAYERS.length)} players · 96 matches</span><a href={BG_CREDIT.href} target="_blank" rel="noreferrer">{BG_CREDIT.label}<ArrowUpRight aria-hidden="true"/></a></footer>
+      <footer className="gd-footer"><span>ACC Seasons 5–8 · {fmt(PLAYERS.length)} players · 96 matches</span></footer>
     </div>
     {selected && <PlayerDialog player={selected} onClose={()=>setSelected(null)} />}
   </div>;
@@ -522,3 +521,4 @@ const dashboardStyles = `
 }
 @media (prefers-reduced-motion: reduce){ .gd-app *, .gd-app *::before, .gd-app *::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 `;
+
