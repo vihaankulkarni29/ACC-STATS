@@ -170,7 +170,7 @@ function aggregateSeasonRows(rows: SeasonRow[], base: Player): Player {
 function assignRanks(rows: Player[]) {
   const bat = [...rows].sort((a,b)=>b.runs-a.runs || b.batting_average-a.batting_average || b.batting_strike_rate-a.batting_strike_rate || a.player_name.localeCompare(b.player_name));
   const bowl = [...rows].sort((a,b)=>b.wickets-a.wickets || (a.bowling_average||9999)-(b.bowling_average||9999) || (a.economy||9999)-(b.economy||9999) || a.player_name.localeCompare(b.player_name));
-  const fld = [...rows].sort((a,b)=>b.fielding_dismissals-a.fielding_dismissals || b.catches-a.catches || b.run_outs-a.run_outs || b.stumpings-a.stumpings || a.player_name.localeCompare(b.player_name));
+  const fld = [...rows].sort((a,b)=>b.catches-a.catches || b.fielding_dismissals-a.fielding_dismissals || b.run_outs-a.run_outs || b.stumpings-a.stumpings || a.player_name.localeCompare(b.player_name));
   const batRank = new Map(bat.map((p,i)=>[p.acc_cumulative_id,i+1]));
   const bowlRank = new Map(bowl.map((p,i)=>[p.acc_cumulative_id,i+1]));
   const fldRank = new Map(fld.map((p,i)=>[p.acc_cumulative_id,i+1]));
@@ -246,11 +246,12 @@ function PlayerDialog({ player, onClose }: { player: Player; onClose: () => void
     <section className="gd-dialog-inner">
       <header><h2 style={{fontSize:20}}>{player.player_name}</h2><button type="button" className="gd-icon-button" aria-label="Close" onClick={()=>ref.current?.close()}><X aria-hidden="true"/></button></header>
       <p style={{color:"var(--gd-muted)",fontSize:12,marginBottom:12}}>{player.acc_cumulative_id} · {player.teams_all.replaceAll("|", ", ")} · Seasons {player.season_list.replaceAll("|", ", ")}</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:12}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8,marginBottom:4}}>
         <RankBadge label="Batting" rank={player.batting_rank} />
         <RankBadge label="Bowling" rank={player.bowling_rank} />
         <RankBadge label="Fielding" rank={player.fielding_rank} />
       </div>
+      <p style={{fontSize:10,color:"var(--gd-muted)",marginBottom:12}}>* Ranks: most runs, most wickets, most catches.</p>
       <div className="gd-work-facts" style={{gridTemplateColumns:"repeat(4,minmax(0,1fr))"}}>
         {[["Matches",player.matches_played],["Runs",player.runs],["HS",player.highest_score],["Avg",fmt2(player.batting_average)],["SR",fmt2(player.batting_strike_rate)],["4s/6s",`${player.fours}/${player.sixes}`],["Wickets",player.wickets],["Best",player.best_bowling||"-"],["Econ",fmt2(player.economy)],["Bowl Avg",player.wickets?fmt2(player.bowling_average):"-"],["Overs",player.overs_bowled],["Fielding",`${player.fielding_dismissals} (Ct ${player.catches}/St ${player.stumpings}/RO ${player.run_outs})`]].map(([l,v])=>(
           <div key={String(l)}><dt>{l}</dt><dd>{String(v)}</dd></div>
@@ -638,7 +639,13 @@ export default function AccStatsDashboard() {
         </main>
         <Dock active={active} select={selectView} />
       </div>
-      <footer className="gd-footer"><span>ACC Seasons 5–8 · {fmt(PLAYERS.length)} players · 96 matches</span></footer>
+      <footer className="gd-footer" style={{flexDirection:"column",alignItems:"stretch",gap:6}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:10,flexWrap:"wrap"}}>
+          <span>ACC Seasons 5–8 · {fmt(PLAYERS.length)} players · 96 matches</span>
+          <span>Data: CricHeroes scorecards · Fielding inferred from dismissal text</span>
+        </div>
+        <span style={{fontSize:10,color:"var(--gd-muted)",lineHeight:1.4}}>* Ranks are based on most runs scored (Batting), most wickets taken (Bowling), and most catches taken (Fielding), respectively.</span>
+      </footer>
     </div>
     {selected && <PlayerDialog player={selected} onClose={()=>setSelected(null)} />}
   </div>;
