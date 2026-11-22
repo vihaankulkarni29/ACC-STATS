@@ -299,20 +299,31 @@ function DockSide({ active, select }: { active: View; select: (v:View)=>void }) 
   </nav>;
 }
 
+function readParams() {
+  if (typeof window === "undefined") return new URLSearchParams();
+  return new URLSearchParams(window.location.search);
+}
+function pick<T extends string>(v: string | null, allowed: readonly T[], fallback: T): T {
+  return v && (allowed as readonly string[]).includes(v) ? (v as T) : fallback;
+}
+
 export default function AccStatsDashboard() {
-  const [view, setView] = useState<View>("overview");
-  const [active, setActive] = useState<View>("overview");
+  const init = readParams();
+  const initView = pick(init.get("view"), ["overview","batting","bowling","players","compare"] as const, "overview");
+  const [view, setView] = useState<View>(initView);
+  const [active, setActive] = useState<View>(initView);
   const [theme, setTheme] = useState<"light"|"dark">("light");
-  const [query, setQuery] = useState("");
-  const [team, setTeam] = useState("All teams");
-  const [season, setSeason] = useState("All seasons");
+  const [query, setQuery] = useState(init.get("q") || "");
+  const [team, setTeam] = useState(init.get("team") || "All teams");
+  const [season, setSeason] = useState(pick(init.get("season"), ["All seasons","5","6","7","8"] as const, "All seasons"));
   const [selected, setSelected] = useState<Player | null>(null);
-  const [sortBat, setSortBat] = useState<SortKey>("runs");
-  const [sortBowl, setSortBowl] = useState<SortKey>("wickets");
-  const [cmpA, setCmpA] = useState<string>(PLAYERS[0]?.acc_cumulative_id || "");
-  const [cmpB, setCmpB] = useState<string>(PLAYERS[1]?.acc_cumulative_id || "");
-  const [cmpExtra1, setCmpExtra1] = useState<string>("fielding_dismissals");
-  const [cmpExtra2, setCmpExtra2] = useState<string>("matches_played");
+  const [sortBat, setSortBat] = useState<SortKey>(pick(init.get("batSort"), ["runs","batting_average","batting_strike_rate","sixes","fours","wickets","economy","bowling_average","matches_played"] as const, "runs"));
+  const [sortBowl, setSortBowl] = useState<SortKey>(pick(init.get("bowlSort"), ["runs","batting_average","batting_strike_rate","sixes","fours","wickets","economy","bowling_average","matches_played"] as const, "wickets"));
+  const [cmpA, setCmpA] = useState<string>(init.get("a") || PLAYERS[0]?.acc_cumulative_id || "");
+  const [cmpB, setCmpB] = useState<string>(init.get("b") || PLAYERS[1]?.acc_cumulative_id || "");
+  const [cmpExtra1, setCmpExtra1] = useState<string>(init.get("x1") || "fielding_dismissals");
+  const [cmpExtra2, setCmpExtra2] = useState<string>(init.get("x2") || "matches_played");
+  const [playerSort, setPlayerSort] = useState<{key:string;dir:"asc"|"desc"}>({key:"runs",dir:"desc"});
   const root = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const scrollArea = useRef<HTMLDivElement>(null);
@@ -403,6 +414,36 @@ export default function AccStatsDashboard() {
     return dir === -1 ? bv-av : av-bv;
   }).slice(0,15), [filtered, sortBowl]);
 
+  const playerRows = useMemo(() => {
+    const dir = playerSort.dir === "asc" ? 1 : -1;
+    const key = playerSort.key;
+    const val = (p: Player) => {
+      if (key === "player_name" || key === "teams_all") return String((p as any)[key] || "").toLowerCase();
+      if (key === "highest_score") return Number(String(p.highest_score||"0").replace("*","")) || 0;
+      if (key === "best_bowling") { const m=String(p.best_bowling||"0/0").match(/(\d+)\/(\d+)/); return m ? Number(m[1])*1000-Number(m[2]) : -1; }
+      return Number((p as any)[key] || 0);
+    };
+    return [...filtered].sort((a,b)=>{
+      const av:any=val(a), bv:any=val(b);
+      if (av<bv) return -1*dir; if (av>bv) return 1*dir;
+      return a.player_name.localeCompare(b.player_name);
+    });
+  }, [filtered, playerSort]);
+
+
+  useEffect(() => {
+    const p = new URLSearchParams();
+    if (view !== "overview") p.set("view", view);
+    if (query.trim()) p.set("q", query.trim());
+    if (team !== "All teams") p.set("team", team);
+    if (season !== "All seasons") p.set("season", season);
+    if (sortBat !== "runs") p.set("batSort", sortBat);
+    if (sortBowl !== "wickets") p.set("bowlSort", sortBowl);
+    if (view === "compare") { if (cmpA) p.set("a", cmpA); if (cmpB) p.set("b", cmpB); if (cmpExtra1!=="fielding_dismissals") p.set("x1", cmpExtra1); if (cmpExtra2!=="matches_played") p.set("x2", cmpExtra2); }
+    const qs = p.toString();
+    const url = `${window.location.pathname}${qs ? `?${qs}` : ""}${window.location.hash}`;
+    window.history.replaceState(null, "", url);
+  }, [view, query, team, season, sortBat, sortBowl, cmpA, cmpB, cmpExtra1, cmpExtra2]);
   const changeView = contextSafe((next: View) => {
     if (pending.current === next) return;
     pending.current = next; setActive(next); exit.current?.kill();
@@ -461,9 +502,15 @@ export default function AccStatsDashboard() {
               <div><h1>{current.label}</h1><p>{current.description}</p></div>
               <div className="gd-view-actions">
                 <label className="gd-filter"><Filter aria-hidden="true" /><select aria-label="Team filter" value={team} onChange={e=>setTeam(e.target.value)}>{teams.map(t=><option key={t}>{t}</option>)}</select></label>
-                <label className="gd-filter"><Filter aria-hidden="true" /><select aria-label="Season filter" value={season} onChange={e=>setSeason(e.target.value)}>{seasons.map(s=><option key={s} value={s}>{s==="All seasons"?s:`Season ${s}`}</option>)}</select></label>
+                <label className="gd-filter"><Filter aria-hidden="true" /><select aria-label="Season filter" value={season} onChange={e=>setSeason(e.target.value as "All seasons"|"5"|"6"|"7"|"8")}>{seasons.map(s=><option key={s} value={s}>{s==="All seasons"?s:`Season ${s}`}</option>)}</select></label>
+                {scoped && <button type="button" className="gd-secondary" onClick={()=>{setTeam("All teams");setSeason("All seasons");setQuery("");}}>Clear filters</button>}
               </div>
             </header>
+            {scoped && <div style={{margin:"-8px 0 14px",display:"flex",gap:8,flexWrap:"wrap"}}>
+              <span style={{fontSize:11,padding:"6px 10px",border:"1px solid var(--gd-line)",borderRadius:999,background:"var(--gd-inner)"}}>
+                {[team!=="All teams"?team:null, season!=="All seasons"?`Season ${season}`:null].filter(Boolean).join(" · ")} · {fmt(filtered.length)} players · {fmt(totals.matches)} matches
+              </span>
+            </div>}
             <div className="gd-content" ref={content} key={view}>
               {view==="overview" && <div className="gd-analytics">
                 <div className="gd-metric-grid">
@@ -540,9 +587,11 @@ export default function AccStatsDashboard() {
               {view==="players" && <div className="gd-analytics">
                 <Panel title="All players" subtitle={`${filtered.length} players · click a row for details`} action={<button type="button" className="gd-secondary" onClick={exportPlayers}><Download aria-hidden="true"/>Export CSV</button>}>
                   <div className="gd-table-scroll"><table>
-                    <thead><tr><th>ID</th><th>Player</th><th>Bat#</th><th>Bowl#</th><th>Fld#</th><th>Teams</th><th>S</th><th>Mat</th><th>Runs</th><th>HS</th><th>Avg</th><th>SR</th><th>Wkts</th><th>BBI</th><th>Econ</th></tr></thead>
-                    <tbody>{filtered.map(p=><tr key={p.acc_cumulative_id} onClick={()=>setSelected(p)} style={{cursor:"pointer"}}>
-                      <td>{p.acc_cumulative_id}</td><td>{p.player_name}</td><td>#{p.batting_rank}</td><td>#{p.bowling_rank}</td><td>#{p.fielding_rank}</td><td>{p.teams_all.replaceAll("|",", ")}</td><td>{p.seasons_played}</td><td>{p.matches_played}</td><td>{p.runs}</td><td>{p.highest_score}</td><td>{fmt2(p.batting_average)}</td><td>{fmt2(p.batting_strike_rate)}</td><td>{p.wickets}</td><td>{p.best_bowling||"-"}</td><td>{fmt2(p.economy)}</td>
+                    <thead><tr>{[
+                      ["player_name","Player"],["batting_rank","Bat#"],["bowling_rank","Bowl#"],["fielding_rank","Fld#"],["teams_all","Teams"],["matches_played","Mat"],["runs","Runs"],["highest_score","HS"],["batting_average","Avg"],["batting_strike_rate","SR"],["wickets","Wkts"],["best_bowling","BBI"],["economy","Econ"],["fielding_dismissals","Fld"]
+                    ].map(([k,l])=><th key={k}><button type="button" style={{all:"unset",cursor:"pointer",fontWeight:800}} onClick={()=>setPlayerSort(s=>s.key===k?{key:k,dir:s.dir==="desc"?"asc":"desc"}:{key:k,dir:(["player_name","teams_all","highest_score","best_bowling","batting_rank","bowling_rank","fielding_rank","economy","bowling_average"].includes(k)?"asc":"desc")})}>{l}{playerSort.key===k?(playerSort.dir==="desc"?" ↓":" ↑"):""}</button></th>)}</tr></thead>
+                    <tbody>{playerRows.map(p=><tr key={p.acc_cumulative_id} onClick={()=>setSelected(p)} style={{cursor:"pointer"}}>
+                      <td>{p.player_name}</td><td>#{p.batting_rank}</td><td>#{p.bowling_rank}</td><td>#{p.fielding_rank}</td><td>{p.teams_all.replaceAll("|",", ")}</td><td>{p.matches_played}</td><td>{p.runs}</td><td>{p.highest_score}</td><td>{fmt2(p.batting_average)}</td><td>{fmt2(p.batting_strike_rate)}</td><td>{p.wickets}</td><td>{p.best_bowling||"-"}</td><td>{fmt2(p.economy)}</td><td>{p.fielding_dismissals}</td>
                     </tr>)}</tbody>
                   </table></div>
                   {filtered.length===0 && <p className="gd-empty" role="status">No players match filters.</p>}
