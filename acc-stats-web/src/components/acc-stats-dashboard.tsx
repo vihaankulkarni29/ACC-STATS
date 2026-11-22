@@ -1,16 +1,16 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode, type MouseEvent } from "react";
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Download, Filter, LayoutDashboard, Moon, Search, Sun, Trophy, Users, X, Target, Flame, Shield, ChevronRight, GitCompareArrows, Medal } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import "@fontsource-variable/manrope";
-import data from "@/data/acc_stats.json";
+import rawData from "@/data/acc_stats.json";
 
 type Player = {
   acc_cumulative_id: string;
   player_name: string;
-  cricheroes_player_id: number | string;
+  cricheroes_player_id: string;
   teams_all: string;
   seasons_played: number;
   season_list: string;
@@ -63,7 +63,50 @@ type Player = {
   fielding_dismissals: number;
 };
 
-const PLAYERS = data as Player[];
+type SeasonRow = {
+  season: number;
+  season_label: string;
+  player_id: string;
+  cricheroes_player_id: string;
+  player_name: string;
+  teams: string;
+  matches_played: number;
+  bat_innings: number;
+  not_outs: number;
+  runs: number;
+  balls_faced: number;
+  highest_score: string;
+  batting_average: number;
+  batting_strike_rate: number;
+  fours: number;
+  sixes: number;
+  ducks: number;
+  "30s": number;
+  "50s": number;
+  "100s": number;
+  bowl_innings: number;
+  overs_bowled: string;
+  maidens: number;
+  runs_conceded: number;
+  wickets: number;
+  best_bowling: string;
+  bowling_average: number;
+  economy: number;
+  bowling_strike_rate: number;
+  wides: number;
+  no_balls: number;
+  dots: number;
+  "3_wicket_hauls": number;
+  "5_wicket_hauls": number;
+  match_ids: string;
+  balls_bowled: number;
+  acc_cumulative_id: string;
+};
+
+type DataFile = { players: Player[]; breakdown: SeasonRow[] };
+const DATA = rawData as unknown as DataFile;
+const PLAYERS = DATA.players;
+const BREAKDOWN = DATA.breakdown;
 const BG = "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1800&q=80";
 
 const number = new Intl.NumberFormat("en-US");
@@ -79,6 +122,60 @@ function saveCsv(filename: string, rows: (string | number)[][]) {
   setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
+
+function ballsToOvers(balls: number) { const b = Math.max(0, Math.round(balls)); return `${Math.floor(b/6)}.${b%6}`; }
+function parseBest(b: string) { const m = String(b||"").match(/(\d+)\/(\d+)/); return m ? { w:+m[1], r:+m[2] } : null; }
+function parseHS(h: string) { const s = String(h||"0"); return { r: +(s.replace("*","")||0), no: s.includes("*") }; }
+
+function aggregateSeasonRows(rows: SeasonRow[], base: Player): Player {
+  const sum = (k: keyof SeasonRow) => rows.reduce((a,r)=>a + (Number(r[k])||0), 0);
+  const runs = sum("runs"), balls = sum("balls_faced"), inns = sum("bat_innings"), no = sum("not_outs");
+  const wkts = sum("wickets"), rc = sum("runs_conceded"), bb = sum("balls_bowled");
+  const dismissals = inns - no;
+  const batting_average = dismissals > 0 ? +(runs/dismissals).toFixed(2) : (inns>0 && no===inns ? +runs.toFixed(2) : 0);
+  const batting_strike_rate = balls > 0 ? +((runs/balls)*100).toFixed(2) : 0;
+  const bowling_average = wkts > 0 ? +(rc/wkts).toFixed(2) : 0;
+  const economy = bb > 0 ? +(rc/(bb/6)).toFixed(2) : 0;
+  const bowling_strike_rate = wkts > 0 ? +(bb/wkts).toFixed(2) : 0;
+  let hs = { r:0, no:false };
+  for (const r of rows) { const h=parseHS(r.highest_score); if (h.r>hs.r || (h.r===hs.r && h.no && !hs.no)) hs=h; }
+  let best: {w:number;r:number}|null = null;
+  for (const r of rows) { const b=parseBest(r.best_bowling); if (b && (!best || b.w>best.w || (b.w===best.w && b.r<best.r))) best=b; }
+  const teams = Array.from(new Set(rows.flatMap(r=>String(r.teams||"").split("|").map(t=>t.trim()).filter(Boolean)))).sort();
+  const seasons = Array.from(new Set(rows.map(r=>r.season))).sort((a,b)=>a-b);
+  const matchIds = Array.from(new Set(rows.flatMap(r=>String(r.match_ids||"").split("|").filter(Boolean))));
+  const byS = (s:number) => rows.filter(r=>r.season===s).reduce((a,r)=>a+r.matches_played,0);
+  return {
+    ...base,
+    teams_all: teams.join("|"),
+    seasons_played: seasons.length,
+    season_list: seasons.join("|"),
+    matches_played: sum("matches_played"),
+    bat_innings: inns, runs, balls_faced: balls, highest_score: `${hs.r}${hs.no?"*":""}`,
+    batting_average, batting_strike_rate, not_outs: no,
+    fours: sum("fours"), sixes: sum("sixes"), ducks: sum("ducks"),
+    "30s": sum("30s"), "50s": sum("50s"), "100s": sum("100s"),
+    bowl_innings: sum("bowl_innings"), overs_bowled: ballsToOvers(bb), wickets: wkts,
+    best_bowling: best ? `${best.w}/${best.r}` : "",
+    bowling_average, economy, bowling_strike_rate,
+    runs_conceded: rc, maidens: sum("maidens"), dots: sum("dots"), wides: sum("wides"), no_balls: sum("no_balls"),
+    "3_wicket_hauls": sum("3_wicket_hauls"), "5_wicket_hauls": sum("5_wicket_hauls"),
+    matches_s5: byS(5), matches_s6: byS(6), matches_s7: byS(7), matches_s8: byS(8),
+    played_s5: byS(5)>0?1:0, played_s6: byS(6)>0?1:0, played_s7: byS(7)>0?1:0, played_s8: byS(8)>0?1:0,
+    balls_bowled: bb,
+    match_ids_all: matchIds.join("|"),
+  };
+}
+
+function assignRanks(rows: Player[]) {
+  const bat = [...rows].sort((a,b)=>b.runs-a.runs || b.batting_average-a.batting_average || b.batting_strike_rate-a.batting_strike_rate || a.player_name.localeCompare(b.player_name));
+  const bowl = [...rows].sort((a,b)=>b.wickets-a.wickets || (a.bowling_average||9999)-(b.bowling_average||9999) || (a.economy||9999)-(b.economy||9999) || a.player_name.localeCompare(b.player_name));
+  const fld = [...rows].sort((a,b)=>b.fielding_dismissals-a.fielding_dismissals || b.catches-a.catches || b.run_outs-a.run_outs || b.stumpings-a.stumpings || a.player_name.localeCompare(b.player_name));
+  const batRank = new Map(bat.map((p,i)=>[p.acc_cumulative_id,i+1]));
+  const bowlRank = new Map(bowl.map((p,i)=>[p.acc_cumulative_id,i+1]));
+  const fldRank = new Map(fld.map((p,i)=>[p.acc_cumulative_id,i+1]));
+  return rows.map(p => ({ ...p, batting_rank: batRank.get(p.acc_cumulative_id)||0, bowling_rank: bowlRank.get(p.acc_cumulative_id)||0, fielding_rank: fldRank.get(p.acc_cumulative_id)||0 }));
+}
 type View = "overview" | "batting" | "bowling" | "players" | "compare";
 const views = [
   { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5–8 cumulative snapshot.", prompt: "Show me the tournament overview." },
@@ -226,36 +323,70 @@ export default function AccStatsDashboard() {
   const teams = useMemo(() => ["All teams", ...Array.from(new Set(PLAYERS.flatMap(p=>p.teams_all.split("|").map(s=>s.trim()).filter(Boolean)))).sort()], []);
   const seasons = ["All seasons","5","6","7","8"];
 
-  const filtered = useMemo(() => PLAYERS.filter(p => {
+  const seasonScoped = season !== "All seasons";
+  const teamScoped = team !== "All teams";
+  const scoped = seasonScoped || teamScoped;
+
+  const viewRows = useMemo(() => {
+    if (!scoped) return PLAYERS as Player[];
+    const s = seasonScoped ? Number(season) : null;
+    const byId = new Map<string, SeasonRow[]>();
+    for (const r of BREAKDOWN) {
+      if (s !== null && r.season !== s) continue;
+      if (teamScoped && !r.teams.split("|").map(t => t.trim()).includes(team)) continue;
+      const arr = byId.get(r.acc_cumulative_id) || [];
+      arr.push(r);
+      byId.set(r.acc_cumulative_id, arr);
+    }
+    const out: Player[] = [];
+    for (const [id, rows] of byId) {
+      const base = PLAYERS.find(p => p.acc_cumulative_id === id);
+      if (!base) continue;
+      const agg = aggregateSeasonRows(rows, base);
+      out.push(agg);
+    }
+    return assignRanks(out);
+  }, [season, team, seasonScoped, teamScoped, scoped]);
+
+
+  useEffect(() => {
+    if (!viewRows.length) return;
+    const ids = new Set(viewRows.map(p=>p.acc_cumulative_id));
+    if (!ids.has(cmpA)) setCmpA(viewRows[0].acc_cumulative_id);
+    if (!ids.has(cmpB)) setCmpB((viewRows[1]||viewRows[0]).acc_cumulative_id);
+  }, [viewRows, cmpA, cmpB]);
+  const filtered = useMemo(() => viewRows.filter(p => {
     const q = query.trim().toLowerCase();
-    const matchQ = !q || [p.player_name,p.acc_cumulative_id,p.teams_all,p.season_list].join(" ").toLowerCase().includes(q);
-    const matchTeam = team === "All teams" || p.teams_all.split("|").includes(team);
-    const matchSeason = season === "All seasons" || p.season_list.split("|").includes(season);
-    return matchQ && matchTeam && matchSeason;
-  }), [query, team, season]);
+    return !q || [p.player_name, p.acc_cumulative_id, p.teams_all, p.season_list].join(" ").toLowerCase().includes(q);
+  }), [viewRows, query]);
 
   const totals = useMemo(() => {
-    const t = { players: filtered.length, matches: 96, runs:0, wickets:0, fours:0, sixes:0, balls:0, inns:0, runsConceded:0, ballsBowled:0 };
-    for (const p of filtered) { t.runs+=p.runs; t.wickets+=p.wickets; t.fours+=p.fours; t.sixes+=p.sixes; t.balls+=p.balls_faced; t.inns+=p.bat_innings; t.runsConceded+=p.runs_conceded; t.ballsBowled+=p.balls_bowled; }
+    const t = { players: filtered.length, runs: 0, wickets: 0, fours: 0, sixes: 0, balls: 0, inns: 0, runsConceded: 0, ballsBowled: 0, matches: 0 };
+    const matchIds = new Set<string>();
+    for (const p of filtered) {
+      t.runs += p.runs; t.wickets += p.wickets; t.fours += p.fours; t.sixes += p.sixes; t.balls += p.balls_faced; t.inns += p.bat_innings; t.runsConceded += p.runs_conceded; t.ballsBowled += p.balls_bowled;
+      String(p.match_ids_all || "").split("|").filter(Boolean).forEach(id => matchIds.add(id));
+    }
+    t.matches = scoped ? matchIds.size : 96;
     return t;
-  }, [filtered]);
+  }, [filtered, scoped]);
 
   const topRun = useMemo(() => [...filtered].sort((a,b)=>b.runs-a.runs).slice(0,8), [filtered]);
-  const topWkt = useMemo(() => [...filtered].sort((a,b)=>b.wickets-a.wickets || a.bowling_average-b.bowling_average).slice(0,8), [filtered]);
-  const seasonAgg = useMemo(() => [5,6,7,8].map(s => {
-    const key = `matches_s${s}` as keyof Player;
-    const played = PLAYERS.filter(p => (p[key] as number) > 0).length;
-    const runs = PLAYERS.reduce((sum,p)=> sum + (s===5?p.matches_s5:s===6?p.matches_s6:s===7?p.matches_s7:p.matches_s8) * 0, 0); // placeholder
-    return { label:`S${s}`, played };
-  }), []);
-  // better season runs/wickets from breakdown not loaded; compute from cumulative by summing per-season? We have matches_s* counts only.
-  // Use players played per season and totals from known metadata:
-  const seasonBars = [
-    { label:"S5", runs:2839, wickets:95, players:92 },
-    { label:"S6", runs:3019, wickets:122, players:100 },
-    { label:"S7", runs:3221, wickets:89, players:110 },
-    { label:"S8", runs:3009, wickets:86, players:100 },
-  ];
+  const topWkt = useMemo(() => [...filtered].sort((a,b)=>b.wickets-a.wickets || (a.bowling_average||9999)-(b.bowling_average||9999)).slice(0,8), [filtered]);
+
+  const seasonBars = useMemo(() => {
+    const seasons = seasonScoped ? [Number(season)] : [5,6,7,8];
+    return seasons.map(s => {
+      let runs = 0, wickets = 0; const played = new Set<string>(); const matchIds = new Set<string>();
+      for (const r of BREAKDOWN) {
+        if (r.season !== s) continue;
+        if (teamScoped && !r.teams.split("|").map(t=>t.trim()).includes(team)) continue;
+        runs += r.runs; wickets += r.wickets; played.add(r.acc_cumulative_id);
+        String(r.match_ids||"").split("|").filter(Boolean).forEach(id => matchIds.add(id));
+      }
+      return { label: `S${s}`, runs, wickets, players: played.size, matches: matchIds.size };
+    });
+  }, [season, seasonScoped, team, teamScoped]);
 
   const batRows = useMemo(() => [...filtered].sort((a,b)=> {
     const dir = sortBat === "batting_average" || sortBat === "economy" || sortBat === "bowling_average" ? 1 : -1;
@@ -295,8 +426,9 @@ export default function AccStatsDashboard() {
   }, { scope: content, dependencies:[view, filtered.length, sortBat, sortBowl, reduced], revertOnUpdate:true });
 
   const exportPlayers = () => {
-    const cols = ["acc_cumulative_id","player_name","teams_all","seasons_played","matches_played","runs","batting_average","batting_strike_rate","highest_score","wickets","best_bowling","economy"];
-    saveCsv("acc-cumulative-filtered.csv", [cols, ...filtered.map(p=>cols.map(c=>String((p as any)[c]??"")))]);
+    const cols = ["acc_cumulative_id","player_name","teams_all","season_list","matches_played","runs","batting_average","batting_strike_rate","highest_score","wickets","best_bowling","bowling_average","economy","catches","stumpings","run_outs","fielding_dismissals","batting_rank","bowling_rank","fielding_rank"];
+    const scope = [team!=="All teams"?team:null, season!=="All seasons"?`S${season}`:null].filter(Boolean).join("-") || "all";
+    saveCsv(`acc-stats-${scope}.csv`, [cols, ...filtered.map(p=>cols.map(c=>String((p as any)[c]??"")))]);
   };
 
   const current = views.find(v=>v.id===view)!;
@@ -334,26 +466,27 @@ export default function AccStatsDashboard() {
             <div className="gd-content" ref={content} key={view}>
               {view==="overview" && <div className="gd-analytics">
                 <div className="gd-metric-grid">
-                  <Metric title="Players" icon={<Users/>} value={totals.players} detail="unique cumulative players" tone="teal" />
-                  <Metric title="Total Runs" icon={<Trophy/>} value={totals.runs} detail={`${fmt(totals.fours)} fours Â· ${fmt(totals.sixes)} sixes`} />
-                  <Metric title="Total Wickets" icon={<Target/>} value={totals.wickets} detail={`econ ${fmt2(bowlEcon)}`} />
-                  <Metric title="Batting SR" icon={<Flame/>} value={battingSR} format={fmt2} detail={`${fmt(totals.inns)} batting innings`} />
+                  <Metric title="Players" icon={<Users/>} value={totals.players} detail={scoped ? "in current scope" : "unique cumulative"} tone="teal" />
+                  <Metric title="Matches" icon={<BarChart3/>} value={totals.matches} detail={scoped ? "in current scope" : "all S5–S8"} />
+                  <Metric title="Runs" icon={<Trophy/>} value={totals.runs} detail={`${fmt(totals.fours)} 4s · ${fmt(totals.sixes)} 6s`} />
+                  <Metric title="Wickets" icon={<Target/>} value={totals.wickets} detail={`econ ${fmt2(bowlEcon)}`} />
+                  <Metric title="Bat SR" icon={<Flame/>} value={battingSR} format={fmt2} detail={`${fmt(totals.inns)} inns`} />
                 </div>
                 <div className="gd-analytics-grid">
-                  <Panel title="Season totals" subtitle="Runs and wickets by season (all matches)">
+                  <Panel title="Season totals" subtitle={scoped ? "Runs/wickets for current filters" : "Runs and wickets by season (all matches)"}>
                     <div style={{display:"grid",gap:10}}>
-                      {seasonBars.map(s=>{ const maxR=3221; return <div key={s.label} style={{display:"grid",gridTemplateColumns:"44px 1fr 1fr",gap:10,alignItems:"center"}}>
+                      {seasonBars.map(s=>{ const maxR=Math.max(1,...seasonBars.map(x=>x.runs)); const maxW=Math.max(1,...seasonBars.map(x=>x.wickets)); return <div key={s.label} style={{display:"grid",gridTemplateColumns:"44px 1fr 1fr",gap:10,alignItems:"center"}}>
                         <strong style={{fontSize:12}}>{s.label}</strong>
                         <div><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--gd-muted)"}}><span>Runs</span><span>{fmt(s.runs)}</span></div><div className="gd-mix-track" style={{height:7,marginTop:4}}><i className="gd-fill" data-tone="teal" style={{width:`${s.runs/maxR*100}%`}} /></div></div>
-                        <div><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--gd-muted)"}}><span>Wickets</span><span>{fmt(s.wickets)}</span></div><div className="gd-mix-track" style={{height:7,marginTop:4}}><i className="gd-fill" data-tone="coral" style={{width:`${s.wickets/122*100}%`}} /></div></div>
+                        <div><div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--gd-muted)"}}><span>Wickets</span><span>{fmt(s.wickets)}</span></div><div className="gd-mix-track" style={{height:7,marginTop:4}}><i className="gd-fill" data-tone="coral" style={{width:`${s.wickets/maxW*100}%`}} /></div></div>
                       </div>; })}
                     </div>
                   </Panel>
-                  <Panel title="Top run scorers" subtitle="Cumulative S5â€“S8">
+                  <Panel title="Top run scorers" subtitle={scoped ? "Current filter scope" : "Cumulative S5–S8"}>
                     <BarList items={topRun} valueKey="runs" tone="teal" />
                   </Panel>
                 </div>
-                <Panel title="Top wicket takers" subtitle="Cumulative S5â€“S8">
+                <Panel title="Top wicket takers" subtitle={scoped ? "Current filter scope" : "Cumulative S5–S8"}>
                   <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:12}}>
                     <BarList items={topWkt.slice(0,4)} valueKey="wickets" tone="coral" />
                     <BarList items={topWkt.slice(4,8)} valueKey="wickets" tone="coral" />
@@ -416,8 +549,9 @@ export default function AccStatsDashboard() {
               </div>}
 
               {view==="compare" && (() => {
-                const a = PLAYERS.find(p=>p.acc_cumulative_id===cmpA) || PLAYERS[0];
-                const b = PLAYERS.find(p=>p.acc_cumulative_id===cmpB) || PLAYERS[1];
+                const cmpPool = viewRows.length ? viewRows : PLAYERS;
+                const a = cmpPool.find(p=>p.acc_cumulative_id===cmpA) || cmpPool[0];
+                const b = cmpPool.find(p=>p.acc_cumulative_id===cmpB) || cmpPool[1] || cmpPool[0];
                 const extraOptions = [
                   { key: "matches_played", label: "Matches" },
                   { key: "fielding_dismissals", label: "Fielding dismissals" },
@@ -456,8 +590,8 @@ export default function AccStatsDashboard() {
                 ];
                 return <div className="gd-analytics">
                   <Panel title="Compare players" subtitle="8-metric head-to-head comparison" action={<div className="gd-table-tools">
-                    <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>A</span><select value={cmpA} onChange={e=>setCmpA(e.target.value)} aria-label="Player A">{PLAYERS.map(p=><option key={p.acc_cumulative_id} value={p.acc_cumulative_id}>{p.player_name}</option>)}</select></label>
-                    <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>B</span><select value={cmpB} onChange={e=>setCmpB(e.target.value)} aria-label="Player B">{PLAYERS.map(p=><option key={p.acc_cumulative_id} value={p.acc_cumulative_id}>{p.player_name}</option>)}</select></label>
+                    <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>A</span><select value={cmpA} onChange={e=>setCmpA(e.target.value)} aria-label="Player A">{cmpPool.map(p=><option key={p.acc_cumulative_id} value={p.acc_cumulative_id}>{p.player_name}</option>)}</select></label>
+                    <label className="gd-filter"><span style={{fontSize:11,color:"var(--gd-muted)"}}>B</span><select value={cmpB} onChange={e=>setCmpB(e.target.value)} aria-label="Player B">{cmpPool.map(p=><option key={p.acc_cumulative_id} value={p.acc_cumulative_id}>{p.player_name}</option>)}</select></label>
                   </div>}>
                     <div style={{display:"grid",gridTemplateColumns:"1fr auto 1fr",gap:12,alignItems:"center",marginBottom:16}}>
                       <div style={{textAlign:"center",padding:12,border:"1px solid var(--gd-line)",borderRadius:14,background:"var(--gd-inner)"}}>
@@ -566,7 +700,7 @@ const dashboardStyles = `
 .gd-primary,.gd-secondary{ display:inline-flex; justify-content:center; align-items:center; gap:7px; min-block-size:40px; padding:7px 12px; font-size:11.5px; font-weight:790; line-height:1.2; border-radius:999px; border:1px solid transparent; }
 .gd-primary{ background:var(--gd-primary); color:var(--gd-primary-ink); } .gd-secondary{ background:var(--gd-raised); border-color:var(--gd-rim); color:var(--gd-ink); }
 .gd-content{ min-inline-size:0; }
-.gd-analytics,.gd-metric-grid,.gd-analytics-grid{ display:grid; gap:12px; } .gd-metric-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } .gd-analytics-grid{ grid-template-columns:minmax(0,1.75fr) minmax(0,1fr); }
+.gd-analytics,.gd-metric-grid,.gd-analytics-grid{ display:grid; gap:12px; } .gd-metric-grid{ grid-template-columns:repeat(5,minmax(0,1fr)); } .gd-analytics-grid{ grid-template-columns:minmax(0,1.75fr) minmax(0,1fr); }
 .gd-panel,.gd-metric{ min-inline-size:0; border:1px solid var(--gd-rim); border-radius:20px; background:linear-gradient(144deg,var(--gd-card-light),transparent 66%),var(--gd-card); box-shadow:inset 0 1px 1px var(--gd-edge-light),inset 0 -1px 1px var(--gd-edge-shade),0 6px 18px rgb(var(--gd-dark-shadow) / 9%); }
 .gd-panel{ padding:15px 16px; } .gd-panel-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:7px 12px; margin-block-end:12px; }
 .gd-panel-head h2{ font-size:14px; font-weight:810; letter-spacing:-.024em; } .gd-panel-head p{ font-size:11px; color:var(--gd-muted); margin-block-start:3px; }
