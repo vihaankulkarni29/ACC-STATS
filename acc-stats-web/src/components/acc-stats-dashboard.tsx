@@ -178,11 +178,11 @@ function assignRanks(rows: Player[]) {
 }
 type View = "overview" | "batting" | "bowling" | "players" | "compare";
 const views = [
-  { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5–8 cumulative snapshot.", prompt: "Show me the tournament overview." },
-  { id: "batting" as View, label: "Batting", short: "Batting", icon: Trophy, description: "Top run scorers, strike rates, and batting leaders.", prompt: "Who dominated with the bat?" },
-  { id: "bowling" as View, label: "Bowling", short: "Bowling", icon: Target, description: "Wicket takers, economy, and bowling leaders.", prompt: "Who took the most wickets?" },
-  { id: "players" as View, label: "Players", short: "Players", icon: Users, description: "Search and inspect every cumulative player record.", prompt: "Find any player's cumulative stats." },
-  { id: "compare" as View, label: "Compare", short: "Compare", icon: GitCompareArrows, description: "Head-to-head metric comparison between two players.", prompt: "Compare two players." },
+  { id: "overview" as View, label: "Overview", short: "Overview", icon: LayoutDashboard, description: "ACC Seasons 5–8 cumulative snapshot." },
+  { id: "batting" as View, label: "Batting", short: "Batting", icon: Trophy, description: "Top run scorers, strike rates, and batting leaders." },
+  { id: "bowling" as View, label: "Bowling", short: "Bowling", icon: Target, description: "Wicket takers, economy, and bowling leaders." },
+  { id: "players" as View, label: "Players", short: "Players", icon: Users, description: "Search and inspect every cumulative player record." },
+  { id: "compare" as View, label: "Compare", short: "Compare", icon: GitCompareArrows, description: "Head-to-head metric comparison between two players." },
 ];
 
 type SortKey = "runs" | "batting_average" | "batting_strike_rate" | "sixes" | "fours" | "wickets" | "economy" | "bowling_average" | "matches_played";
@@ -443,7 +443,7 @@ export default function AccStatsDashboard() {
         <div className="gd-brand"><span className="gd-logo" aria-hidden="true"><Trophy size={20}/></span><div><strong>ACC STATS</strong><small>Seasons 5â€“8 cumulative</small></div></div>
         <label className="gd-ask" style={{cursor:"text"}}>
           <span className="gd-orb" aria-hidden="true" />
-          <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={current.prompt} aria-label="Search players" style={{flex:1,minWidth:0,border:0,background:"transparent",outline:"none",fontSize:12,fontWeight:750}} />
+          <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search players, teams, IDs..." aria-label="Search players" style={{flex:1,minWidth:0,border:0,background:"transparent",outline:"none",fontSize:12,fontWeight:750}} />
           <Search aria-hidden="true" className="gd-ask-search" />
         </label>
         <div className="gd-top-actions">
