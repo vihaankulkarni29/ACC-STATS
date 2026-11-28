@@ -100,6 +100,9 @@ type SeasonRow = {
   "5_wicket_hauls": number;
   match_ids: string;
   balls_bowled: number;
+  catches: number;
+  stumpings: number;
+  run_outs: number;
   acc_cumulative_id: string;
 };
 
@@ -342,22 +345,74 @@ export default function AccStatsDashboard() {
   const viewRows = useMemo(() => {
     if (!scoped) return PLAYERS as Player[];
     const s = seasonScoped ? Number(season) : null;
-    const byId = new Map<string, SeasonRow[]>();
+    // Aggregate breakdown rows by player ID for the selected season/team
+    const agg = new Map<string, {
+      runs: number; wickets: number; balls_faced: number; bat_innings: number;
+      not_outs: number; fours: number; sixes: number; runs_conceded: number;
+      balls_bowled: number; catches: number; stumpings: number; run_outs: number;
+      match_count: number; bowl_innings: number;
+    }>();
     for (const r of BREAKDOWN) {
       if (s !== null && r.season !== s) continue;
       if (teamScoped && !r.teams.split("|").map(t => t.trim()).includes(team)) continue;
-      const arr = byId.get(r.acc_cumulative_id) || [];
-      arr.push(r);
-      byId.set(r.acc_cumulative_id, arr);
+      const id = r.acc_cumulative_id;
+      if (!agg.has(id)) agg.set(id, {runs:0,wickets:0,balls_faced:0,bat_innings:0,not_outs:0,fours:0,sixes:0,runs_conceded:0,balls_bowled:0,catches:0,stumpings:0,run_outs:0,match_count:0,bowl_innings:0});
+      const a = agg.get(id)!;
+      a.runs += Number(r.runs)||0;
+      a.wickets += Number(r.wickets)||0;
+      a.balls_faced += Number(r.balls_faced)||0;
+      a.bat_innings += Number(r.bat_innings)||0;
+      a.not_outs += Number(r.not_outs)||0;
+      a.fours += Number(r.fours)||0;
+      a.sixes += Number(r.sixes)||0;
+      a.runs_conceded += Number(r.runs_conceded)||0;
+      a.balls_bowled += Number(r.balls_bowled)||0;
+      a.catches += Number(r.catches)||0;
+      a.stumpings += Number(r.stumpings)||0;
+      a.run_outs += Number(r.run_outs)||0;
+      a.match_count += Number(r.matches_played)||0;
+      a.bowl_innings += Number(r.bowl_innings)||0;
     }
     const out: Player[] = [];
-    for (const [id, rows] of byId) {
+    for (const [id, a] of agg) {
       const base = PLAYERS.find(p => p.acc_cumulative_id === id);
       if (!base) continue;
-      const agg = aggregateSeasonRows(rows, base);
-      out.push(agg);
+      const dismissals = a.bat_innings - a.not_outs;
+      out.push({
+        ...base,
+        matches_played: a.match_count,
+        bat_innings: a.bat_innings,
+        runs: a.runs,
+        balls_faced: a.balls_faced,
+        not_outs: a.not_outs,
+        batting_average: dismissals > 0 ? +(a.runs/dismissals).toFixed(2) : 0,
+        batting_strike_rate: a.balls_faced > 0 ? +((a.runs/a.balls_faced)*100).toFixed(2) : 0,
+        fours: a.fours,
+        sixes: a.sixes,
+        bowl_innings: a.bowl_innings,
+        overs_bowled: ballsToOvers(a.balls_bowled),
+        wickets: a.wickets,
+        runs_conceded: a.runs_conceded,
+        bowling_average: a.wickets > 0 ? +(a.runs_conceded/a.wickets).toFixed(2) : 0,
+        economy: a.balls_bowled > 0 ? +(a.runs_conceded/(a.balls_bowled/6)).toFixed(2) : 0,
+        bowling_strike_rate: a.wickets > 0 ? +(a.balls_bowled/a.wickets).toFixed(2) : 0,
+        catches: a.catches,
+        stumpings: a.stumpings,
+        run_outs: a.run_outs,
+        fielding_dismissals: a.catches + a.stumpings + a.run_outs,
+        balls_bowled: a.balls_bowled,
+        seasons_played: 1,
+        season_list: String(s),
+        matches_s5: s===5?a.match_count:0,
+        matches_s6: s===6?a.match_count:0,
+        matches_s7: s===7?a.match_count:0,
+        matches_s8: s===8?a.match_count:0,
+        played_s5: s===5?1:0,
+        played_s6: s===6?1:0,
+        played_s7: s===7?1:0,
+        played_s8: s===8?1:0,
+      });
     }
-    console.log("DEBUG viewRows:", { season, team, scoped, breakdownCount: BREAKDOWN.length, byIdSize: byId.size, outCount: out.length, sampleIds: [...byId.keys()].slice(0,5) });
     return assignRanks(out);
   }, [season, team, seasonScoped, teamScoped, scoped]);
 
@@ -369,12 +424,10 @@ export default function AccStatsDashboard() {
     if (!ids.has(cmpB)) setCmpB((viewRows[1]||viewRows[0]).acc_cumulative_id);
   }, [viewRows, cmpA, cmpB]);
   const filtered = useMemo(() => {
-    const result = viewRows.filter(p => {
-    const q = query.trim().toLowerCase();
-    return !q || [p.player_name, p.acc_cumulative_id, p.teams_all, p.season_list].join(" ").toLowerCase().includes(q);
-  });
-    console.log("DEBUG filtered:", { query, viewRowsLength: viewRows.length, filteredLength: result.length });
-    return result;
+    return viewRows.filter(p => {
+      const q = query.trim().toLowerCase();
+      return !q || [p.player_name, p.acc_cumulative_id, p.teams_all, p.season_list].join(" ").toLowerCase().includes(q);
+    });
   }, [viewRows, query]);
 
   const totals = useMemo(() => {
