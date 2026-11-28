@@ -434,7 +434,7 @@ export default function AccStatsDashboard() {
     const t = { players: filtered.length, runs: 0, wickets: 0, fours: 0, sixes: 0, balls: 0, inns: 0, runsConceded: 0, ballsBowled: 0, matches: 0 };
     const matchIds = new Set<string>();
     for (const p of filtered) {
-      t.runs += p.runs; t.wickets += p.wickets; t.fours += p.fours; t.sixes += p.sixes; t.balls += p.balls_faced; t.inns += p.bat_innings; t.runsConceded += p.runs_conceded; t.ballsBowled += p.balls_bowled;
+      t.runs += Number(p.runs||0); t.wickets += Number(p.wickets||0); t.fours += Number(p.fours||0); t.sixes += Number(p.sixes||0); t.balls += Number(p.balls_faced||0); t.inns += Number(p.bat_innings||0); t.runsConceded += Number(p.runs_conceded||0); t.ballsBowled += Number(p.balls_bowled||0);
       String(p.match_ids_all || "").split("|").filter(Boolean).forEach(id => matchIds.add(id));
     }
     t.matches = scoped ? matchIds.size : 96;
