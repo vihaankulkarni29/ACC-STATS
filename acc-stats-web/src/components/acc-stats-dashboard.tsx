@@ -357,6 +357,7 @@ export default function AccStatsDashboard() {
       const agg = aggregateSeasonRows(rows, base);
       out.push(agg);
     }
+    console.log("DEBUG viewRows:", { season, team, scoped, breakdownCount: BREAKDOWN.length, byIdSize: byId.size, outCount: out.length, sampleIds: [...byId.keys()].slice(0,5) });
     return assignRanks(out);
   }, [season, team, seasonScoped, teamScoped, scoped]);
 
@@ -367,10 +368,14 @@ export default function AccStatsDashboard() {
     if (!ids.has(cmpA)) setCmpA(viewRows[0].acc_cumulative_id);
     if (!ids.has(cmpB)) setCmpB((viewRows[1]||viewRows[0]).acc_cumulative_id);
   }, [viewRows, cmpA, cmpB]);
-  const filtered = useMemo(() => viewRows.filter(p => {
+  const filtered = useMemo(() => {
+    const result = viewRows.filter(p => {
     const q = query.trim().toLowerCase();
     return !q || [p.player_name, p.acc_cumulative_id, p.teams_all, p.season_list].join(" ").toLowerCase().includes(q);
-  }), [viewRows, query]);
+  });
+    console.log("DEBUG filtered:", { query, viewRowsLength: viewRows.length, filteredLength: result.length });
+    return result;
+  }, [viewRows, query]);
 
   const totals = useMemo(() => {
     const t = { players: filtered.length, runs: 0, wickets: 0, fours: 0, sixes: 0, balls: 0, inns: 0, runsConceded: 0, ballsBowled: 0, matches: 0 };
